@@ -9,7 +9,7 @@ namespace MusicGlue.Models
         public List<MusicProduct> MusicProducts { get; set; }
         public int Id { get; set; }
 
-        public string PostalCode { get; set; }
+        public string ZipCode { get; set; }
 
         public string CustomerCountry { get; set; }
 
