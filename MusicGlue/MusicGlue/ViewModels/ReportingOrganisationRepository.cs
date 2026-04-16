@@ -45,5 +45,12 @@ namespace MusicGlue.ViewModels
             }
 
         }
+
+        public List<ReportingOrganisation> GetAll()
+        {
+            return reportingOrganisations;
+        }
+
+
     }
 }
