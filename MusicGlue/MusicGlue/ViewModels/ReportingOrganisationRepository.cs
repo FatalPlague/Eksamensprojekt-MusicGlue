@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using MusicGlue.Models;
 using System;
 using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
@@ -13,16 +15,35 @@ namespace MusicGlue.ViewModels
 
         public ReportingOrganisationRepository()
         {
-            IConfigurationRoot config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
 
-            cars = new List<Car>();
+            reportingOrganisations = new List<ReportingOrganisation>();
 
-            ConnectionString = config.GetConnectionString("MyDBConnection");
+            ConnectionString = Configuration.ConnectionString;
+
+            initializeRepository();
         }
 
-        // Relevante CRUD-metoder indsættes her
+        private void initializeRepository()
+        {
+            using (SqlConnection con = new SqlConnection(ConnectionString))
+            {
+                con.Open();
+                SqlCommand cmd = new SqlCommand("SELECT Id, Name, Country FROM REPORTINGORGANISATION", con);
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        ReportingOrganisation reportingOrganisation = new ReportingOrganisation
+                        {
+                            Id = dr.GetInt32(0),
+                            Name = (string)dr["Name"],
+                            Country = (string)dr["Country"]
+                        };
+                        reportingOrganisations.Add(reportingOrganisation);
+                    }
+                }
+            }
 
+        }
     }
 }
