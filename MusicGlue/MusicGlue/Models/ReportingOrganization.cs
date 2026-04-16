@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MusicGlue.Models
 {
-    public class ReportingOrganization
+    public class ReportingOrganisation
     {
         public int Id { get; set; }
         public string Name { get; set; }
