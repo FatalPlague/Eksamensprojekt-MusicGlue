@@ -1,13 +1,13 @@
---CREATE DATABASE MusicGlue
---go
+DROP database MusicGlue
+go
+CREATE DATABASE MusicGlue
+go
 use MusicGlue
 
 CREATE TABLE REPORTINGORGANISATION (
 Id Int IDENTITY(1,1),  
 Name NVarChar(50) NOT NULL,
 Country NVarChar(50) NOT NULL,
-Format NVarChar(100) NOT NULL,
-IdentificationType NVarChar(50) NOT NULL
 
 CONSTRAINT PK_REPORTINGORGANISATION PRIMARY KEY (Id)
 );
