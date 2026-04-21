@@ -1,10 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 using MusicGlue.Models;
-using System;
-using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
 
 namespace MusicGlue.ViewModels
 {
@@ -20,10 +15,10 @@ namespace MusicGlue.ViewModels
 
             ConnectionString = Configuration.ConnectionString;
 
-            initializeRepository();
+            InitializeRepository();
         }
 
-        private void initializeRepository()
+        private void InitializeRepository()
         {
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
@@ -51,6 +46,9 @@ namespace MusicGlue.ViewModels
             return reportingOrganisations;
         }
 
-
+        public ReportingOrganisation Get(int id)
+        {
+            return reportingOrganisations.Find(reportingOrg => reportingOrg.Id == id);
+        }
     }
 }
