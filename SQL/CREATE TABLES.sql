@@ -1,4 +1,4 @@
-DROP database MusicGlue
+drop database MusicGlue
 go
 CREATE DATABASE MusicGlue
 go
@@ -15,9 +15,9 @@ CONSTRAINT PK_REPORTINGORGANISATION PRIMARY KEY (Id)
 CREATE TABLE CONSIGNMENT (
 Id Int IDENTITY(1,1),
 CustomerCountry NVarChar(50) NOT NULL,
-ZipCode Int NOT NULL,
+ZipCode NVarChar(50) NOT NULL,
 ConsignmentStatus NVarChar(50) NOT NULL,
-ReportingStatus NVarChar(50) NOT NULL
+ReportingStatus Bit NOT NULL,
 
 CONSTRAINT PK_CONSIGNMENT PRIMARY KEY(Id)
 );
@@ -27,6 +27,7 @@ Id Int IDENTITY(1,1),
 APN NVarChar(50) NOT NULL,
 CatalogNumber NVarChar(50) NOT NULL,
 SKU NVarCHar(50) NOT NULL,
+Barcode NVarChar(50) NOT NULL,
 
 CONSTRAINT PK_PRODUCTDESCRIPTION PRIMARY KEY(Id)
 );
