@@ -45,7 +45,7 @@ namespace MusicGlue.ViewModels
                                 Id = consignmentId,
                                 CustomerCountry = (string)dr["CustomerCountry"],
                                 ZipCode = (string)dr["ZipCode"],
-                                ConsignmentStatus = (string)dr["ConsignmentStatus"],
+                                ConsignmentStatus = (ConsignmentStatus)dr["ConsignmentStatus"],
                                 ReportingStatus = (bool)dr["ReportingStatus"],
                                 MusicProducts = new List<MusicProduct>()
                             };
