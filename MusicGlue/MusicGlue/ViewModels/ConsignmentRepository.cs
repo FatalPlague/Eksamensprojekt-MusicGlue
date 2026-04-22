@@ -1,10 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using MusicGlue.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Data;
-using System.CodeDom.Compiler;
 
 namespace MusicGlue.ViewModels
 {
@@ -27,71 +23,56 @@ namespace MusicGlue.ViewModels
             {
                 con.Open();
 
-                string query = "SELECT CONSIGNMENT.Id, CONSIGNMENT.CustomerCountry, CONSIGNMENT.ZipCode, CONSIGNMENT.Consignmentstatus, CONSIGNMENT.ReportingStatus, MUSICPRODUCT.Id, MUSICPRODUCT.Price, MUSICPRODUCT.ProductDescriptionId " +
-                    "FROM CONSIGNMENT, MUSICPRODUCT_CONSIGNMENT, MUSICPRODUCT " +
-                    "WHERE Consignment.Id = MUSICPRODUCT_CONSIGNMENT.ConsignmentId AND MUSICPRODUCT.Id = MUSICPRODUCT_CONSIGNMENT.ProductId";
+                string query = "SELECT " +
+                    "CONSIGNMENT.Id AS 'ConsignmentId', CONSIGNMENT.CustomerCountry, CONSIGNMENT.ZipCode, CONSIGNMENT.ConsignmentStatus, CONSIGNMENT.ReportingStatus, " +
+                    "MUSICPRODUCT.Id AS 'MusicProductId', MUSICPRODUCT.Price, " +
+                    "PRODUCTDESCRIPTION.Id AS 'ProductDescriptionId', PRODUCTDESCRIPTION.APN, PRODUCTDESCRIPTION.CatalogNumber, PRODUCTDESCRIPTION.SKU, PRODUCTDESCRIPTION.Barcode " +
+                    "FROM CONSIGNMENT, MUSICPRODUCT_CONSIGNMENT, MUSICPRODUCT, PRODUCTDESCRIPTION " +
+                    "WHERE CONSIGNMENT.Id = MUSICPRODUCT_CONSIGNMENT.ConsignmentId AND MUSICPRODUCT.Id = MUSICPRODUCT_CONSIGNMENT.ProductId AND PRODUCTDESCRIPTION.Id = MUSICPRODUCT.ProductDescriptionId";
 
                 SqlCommand cmd = new SqlCommand(query, con);
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
-                    int consignmentIdChecker = -1;
-
-                    //temp consignment object and attributes
-                    Consignment tempConsignment = new Consignment();
-
-                    int tempId = 0;
-                    string tempCustomerCountry = "";
-                    string tempZipCode = "";
-                    ConsignmentStatus tempConsignmentStatus = ConsignmentStatus.NotDispatched;
-                    bool tempReportingStatus = false;
-                    List<MusicProduct> tempMusicProducts = new List<MusicProduct>();
+                    Dictionary<int, Consignment> consignmentDictionary = new Dictionary<int, Consignment>();
 
                     while (dr.Read())
                     {
-                        //add musicProducts to consignment
-                        if (consignmentIdChecker == dr.GetInt32(0))
+                        int consignmentId = (int)dr["ConsignmentId"];
+                        if (!consignmentDictionary.TryGetValue(consignmentId, out Consignment? consignment))
                         {
-                            MusicProduct tempMusicproduct = new MusicProduct
+                            consignment = new Consignment
                             {
-                                ProductId = dr.GetInt32(0),
-                                Price = (double)dr["MUSICPRODUCT.Price"],
-                                ProductDescriptionId = (int)dr["MUSICPRODUCT.ProductDescriptionId"]
+                                Id = consignmentId,
+                                CustomerCountry = (string)dr["CustomerCountry"],
+                                ZipCode = (string)dr["ZipCode"],
+                                ConsignmentStatus = (string)dr["ConsignmentStatus"],
+                                ReportingStatus = (bool)dr["ReportingStatus"],
+                                MusicProducts = new List<MusicProduct>()
                             };
-                            tempMusicProducts.Add(tempMusicproduct);
+
+                            consignmentDictionary.Add(consignmentId, consignment);
                         }
 
-                        //new consignment begins
-                        if (consignmentIdChecker != dr.GetInt32(0))
+                        ProductDescription productDescription = new ProductDescription
                         {
-                            // add consignment to consignments list
-                            if (consignmentIdChecker != -1)
-                            {
-                                tempConsignment = new Consignment
-                                {
-                                    Id = tempId,
-                                    CustomerCountry = tempCustomerCountry,
-                                    ZipCode = tempZipCode,
-                                    ConsignmentStatus = tempConsignmentStatus,
-                                    ReportingStatus = tempReportingStatus,
-                                    MusicProducts = tempMusicProducts
-                                };
-                                consignments.Add(tempConsignment);
-                            }
+                            Id = (int)dr["ProductDescriptionId"],
+                            APN = (string)dr["APN"],
+                            CatalogNumber = (string)dr["CatalogNumber"],
+                            SKU = (string)dr["SKU"],
+                            Barcode = (string)dr["Barcode"]
+                        };
 
-                            //add new consignment attributes
-                            tempId = dr.GetInt32(0);
-                            tempCustomerCountry = (string)dr["CONSIGNMENT.CustomerCountry"];
-                            tempZipCode = (string)dr["CONSIGNMENT.ZipCode"];
-                            tempConsignmentStatus = (ConsignmentStatus)dr["CONSIGNMENT.Consignmentstatus"];
-                            tempReportingStatus = (bool)dr["CONSIGNMENT.ReportingStatus"];
-                            tempMusicProducts.Clear();
+                        MusicProduct musicProduct = new MusicProduct
+                        {
+                            Id = (int)dr["MusicProductId"],
+                            Price = (double)dr["Price"],
+                            Description = productDescription
+                        };
 
-                            //update consingmentIdChecker
-                            consignmentIdChecker = dr.GetInt32(0);
-                        }
+                        consignment.MusicProducts.Add(musicProduct);
                     }
-                    //Add last Consignment to consignments list
-                    consignments.Add(tempConsignment);
+
+                    consignments = consignmentDictionary.Values.ToList();
                 }
             }
         }
