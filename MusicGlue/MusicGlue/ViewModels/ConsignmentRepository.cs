@@ -36,7 +36,9 @@ namespace MusicGlue.ViewModels
                 {
                     int consignmentIdChecker = -1;
 
-                    //temp consignment attributes
+                    //temp consignment object and attributes
+                    Consignment tempConsignment = new Consignment();
+
                     int tempId = 0;
                     string tempCustomerCountry = "";
                     string tempZipCode = "";
@@ -49,13 +51,13 @@ namespace MusicGlue.ViewModels
                         //add musicProducts to consignment
                         if (consignmentIdChecker == dr.GetInt32(0))
                         {
-                            MusicProduct musicproduct = new MusicProduct
+                            MusicProduct tempMusicproduct = new MusicProduct
                             {
                                 ProductId = dr.GetInt32(0),
                                 Price = (double)dr["MUSICPRODUCT.Price"],
                                 ProductDescriptionId = (int)dr["MUSICPRODUCT.ProductDescriptionId"]
                             };
-                            tempMusicProducts.Add(musicproduct);
+                            tempMusicProducts.Add(tempMusicproduct);
                         }
 
                         //new consignment begins
@@ -64,7 +66,7 @@ namespace MusicGlue.ViewModels
                             // add consignment to consignments list
                             if (consignmentIdChecker != -1)
                             {
-                                Consignment consignment = new Consignment
+                                tempConsignment = new Consignment
                                 {
                                     Id = tempId,
                                     CustomerCountry = tempCustomerCountry,
@@ -73,7 +75,7 @@ namespace MusicGlue.ViewModels
                                     ReportingStatus = tempReportingStatus,
                                     MusicProducts = tempMusicProducts
                                 };
-                                consignments.Add(consignment);
+                                consignments.Add(tempConsignment);
                             }
 
                             //add new consignment attributes
@@ -88,8 +90,8 @@ namespace MusicGlue.ViewModels
                             consignmentIdChecker = dr.GetInt32(0);
                         }
                     }
-
-
+                    //Add last Consignment to consignments list
+                    consignments.Add(tempConsignment);
                 }
             }
         }
