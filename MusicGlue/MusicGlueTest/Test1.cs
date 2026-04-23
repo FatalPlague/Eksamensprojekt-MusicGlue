@@ -9,44 +9,39 @@ namespace MusicGlueTest
     {
         // Arrange
         List<Consignment> consignments;
-        Consignment c1;
-        MusicProduct m1;
-        MusicProduct m2;
-        ProductDescription d1;
-        ProductDescription d2;
-        IFormatter f;
+        IFormatter formatter;
 
         [TestInitialize]
         public void init()
         {
             // Act
-            d1 = new ProductDescription()
+            ProductDescription d1 = new ProductDescription()
             {
                 Id = 1,
                 Barcode = "521900114742",
             };
 
-            d2 = new ProductDescription()
+            ProductDescription d2 = new ProductDescription()
             {
                 Id = 1,
                 Barcode = "856200115725",
             };
 
-            m1 = new MusicProduct()
+            MusicProduct m1 = new MusicProduct()
             {
                 Id = 1,
                 Price = 1.56,
                 Description = d1
             };
 
-            m2 = new MusicProduct()
+            MusicProduct m2 = new MusicProduct()
             {
                 Id = 2,
                 Price = 13.60,
                 Description = d2
             };
 
-            c1 = new Consignment()
+            Consignment c1 = new Consignment()
             {
                 Id = 1,
                 ZipCode = "WC",
@@ -56,11 +51,8 @@ namespace MusicGlueTest
                 MusicProducts = new List<MusicProduct>() {m1, m1, m2, m2, m2, m2 ,m2 ,m2 ,m2 ,m2 ,m2 ,m2 }
             };
 
-            f = new OCCFormatter();
             consignments.Add(c1);
-            
-
-
+            formatter = new OCCFormatter();
         }
 
         [TestMethod]
@@ -68,13 +60,13 @@ namespace MusicGlueTest
         {
             //Assert
             Assert.AreEqual(
-                "0WC  260423\n" +
-                "1521900114742000002 00156\n" +
-                "1856200115725000010 01360\n" +
-                "9WC  00002"
-                ,
-                f.Format(consignments)
-                );
+                "0WC  260423" + Environment.NewLine +
+                "1521900114742000002 00156" + Environment.NewLine +
+                "1856200115725000010 01360" + Environment.NewLine +
+                "9WC  00002",
+
+                formatter.Format(consignments)
+            );
         }
     }
 }
