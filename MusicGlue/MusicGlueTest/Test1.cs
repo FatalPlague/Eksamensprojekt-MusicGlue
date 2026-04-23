@@ -8,7 +8,7 @@ namespace MusicGlueTest
     public sealed class Test1
     {
         // Arrange
-        List<Consignment> consignments;
+        List<Consignment> consignments = new List<Consignment>();
         IFormatter formatter;
 
         [TestInitialize]

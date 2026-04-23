@@ -8,7 +8,18 @@ namespace MusicGlue.Models.Formatters
     {
         public string Format(List<Consignment> consignments)
         {
-            string occ = "0" + consignments[0].ZipCode
+            //Header line
+            string zipCode = "0" + consignments[0].ZipCode;
+            string date = DateTime.Now.ToString("YYMMDD");
+            
+            //
+            foreach (MusicProduct musicProduct in consignments[0].MusicProducts)
+            {
+
+            }
+            
+
+            //footer
 
             return string.Empty;
         }
