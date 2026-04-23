@@ -20,16 +20,19 @@ namespace MusicGlue.Models.Formatters
             {
                 int count = 0;
                 string zipcodePaddet = zipcode.PadRight(5, ' ');
+                
+                //Header formatting
                 strings.Add("0" + zipcodePaddet + date + Environment.NewLine);
                 
-
+                // Dictionary key = musicproduct id
                 Dictionary<int, List<MusicProduct>> musicProductsByZipcode = GetMusicProductsByZipcode(consignments, zipcode);
                 musicProductsByZipcode.Keys.ToList().ForEach(musicProductId =>
                 {
+                    // Dictionary key = musicproduct price
                     Dictionary<double, List<MusicProduct>> musicProductsByPrice = GetMusicProductsByPrice(musicProductsByZipcode[musicProductId]);
                     musicProductsByPrice.Keys.ToList().ForEach(price =>
                     {
-                        List<MusicProduct> musicProducts = musicProductsByPrice[price].OrderBy(x => x.Price).ToList();
+                        List<MusicProduct> musicProducts = musicProductsByPrice[price].ToList();
                         string amount = musicProducts.Count.ToString().PadLeft(6, '0');
                         string barcode = musicProducts[0].Description.Barcode;
                         string priceString = (price * 100).ToString().PadLeft(5, '0');
@@ -40,6 +43,7 @@ namespace MusicGlue.Models.Formatters
                 });
 
                 string amount = count.ToString().PadLeft(5, '0');
+                //footer
                 strings.Add("9" + zipcodePaddet + amount);
 
                 if (zipcodes.IndexOf(zipcode) != zipcodes.Count - 1)
