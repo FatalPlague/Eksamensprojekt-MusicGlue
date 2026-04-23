@@ -8,8 +8,8 @@ namespace MusicGlue.Models.Formatters
     {
         public string Format(List<Consignment> consignments)
         {
-            string date = DateTime.Now.ToString("yyMMdd");
             string result = string.Empty;
+            string date = DateTime.Now.ToString("yyMMdd");
 
             List<string> zipcodes = consignments
                 .Select(consignment => consignment.ZipCode)
