@@ -47,6 +47,7 @@ namespace MusicGlue.Models.Formatters
                 result += "9" + zipcodePaddet + amount;
 
                 // Checks index of zipcode to determine if newlines should be added
+                // Newlines should be added if the index is not the last index of the zipcodes list
                 if (zipcodes.IndexOf(zipcode) != zipcodes.Count - 1)
                 {
                     result += Environment.NewLine + Environment.NewLine;
