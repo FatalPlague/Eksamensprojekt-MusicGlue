@@ -8,6 +8,8 @@ namespace MusicGlue.Models.Formatters
     {
         public string Format(List<Consignment> consignments)
         {
+            string occ = "0" + consignments[0].ZipCode
+
             return string.Empty;
         }
     }
