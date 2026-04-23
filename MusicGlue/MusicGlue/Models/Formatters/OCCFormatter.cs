@@ -9,7 +9,7 @@ namespace MusicGlue.Models.Formatters
         public string Format(List<Consignment> consignments)
         {
             string date = DateTime.Now.ToString("yyMMdd");
-            List<string> strings = new List<string>();
+            string result = string.Empty;
 
             List<string> zipcodes = consignments
                 .Select(consignment => consignment.ZipCode)
@@ -20,10 +20,10 @@ namespace MusicGlue.Models.Formatters
             {
                 int count = 0;
                 string zipcodePaddet = zipcode.PadRight(5, ' ');
-                
-                //Header formatting
-                strings.Add("0" + zipcodePaddet + date + Environment.NewLine);
-                
+
+                // Header formatting
+                result += "0" + zipcodePaddet + date + Environment.NewLine;
+
                 // Dictionary key = musicproduct id
                 Dictionary<int, List<MusicProduct>> musicProductsByZipcode = GetMusicProductsByZipcode(consignments, zipcode);
                 musicProductsByZipcode.Keys.ToList().ForEach(musicProductId =>
@@ -37,22 +37,23 @@ namespace MusicGlue.Models.Formatters
                         string barcode = musicProducts[0].Description.Barcode;
                         string priceString = (price * 100).ToString().PadLeft(5, '0');
 
-                        strings.Add("1" + barcode + amount + " " + priceString + Environment.NewLine);
+                        result += "1" + barcode + amount + " " + priceString + Environment.NewLine;
                         count++;
                     });
                 });
 
+                // Footer formatting
                 string amount = count.ToString().PadLeft(5, '0');
-                //footer
-                strings.Add("9" + zipcodePaddet + amount);
+                result += "9" + zipcodePaddet + amount;
 
+                // Checks index of zipcode to determine if newlines should be added
                 if (zipcodes.IndexOf(zipcode) != zipcodes.Count - 1)
                 {
-                    strings.Add(Environment.NewLine + Environment.NewLine);
+                    result += Environment.NewLine + Environment.NewLine;
                 }
             });
 
-            return string.Join("", strings);
+            return result;
         }
 
         private Dictionary<int, List<MusicProduct>> GetMusicProductsByZipcode(List<Consignment> consignments, string zipcode)

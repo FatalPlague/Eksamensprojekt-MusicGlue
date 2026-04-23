@@ -81,9 +81,20 @@ namespace MusicGlueTest
                 MusicProducts = new List<MusicProduct>() { m1, m1, m3 }
             };
 
+            Consignment c4 = new Consignment()
+            {
+                Id = 4,
+                ZipCode = "WC",
+                CustomerCountry = "England",
+                ConsignmentStatus = ConsignmentStatus.Dispatched,
+                ReportingStatus = false,
+                MusicProducts = new List<MusicProduct>() { m3 }
+            };
+
             consignments.Add(c1);
             consignments.Add(c2);
             consignments.Add(c3);
+            consignments.Add(c4);
             formatter = new OCCFormatter();
         }
 
@@ -95,7 +106,7 @@ namespace MusicGlueTest
             string expected = "0WC   " + date + Environment.NewLine +
                 "15321900114742000006 00599" + Environment.NewLine +
                 "15321900114742000003 00499" + Environment.NewLine +
-                "15321900983034000022 01299" + Environment.NewLine +
+                "15321900983034000023 01299" + Environment.NewLine +
                 "9WC   00003" + Environment.NewLine +
                 Environment.NewLine +
                 "0L    " + date + Environment.NewLine +
