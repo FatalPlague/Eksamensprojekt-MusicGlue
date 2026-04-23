@@ -6,7 +6,7 @@ namespace MusicGlue.Models.Formatters
 {
     public class OCCFormatter : IFormatter
     {
-        public string Format()
+        public string Format(List<Consignment> consignments)
         {
             return string.Empty;
         }
