@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using MusicGlue.Models;
+using MusicGlue.Models.Formatters;
 
 namespace MusicGlue.ViewModels
 {
@@ -8,13 +9,13 @@ namespace MusicGlue.ViewModels
         private readonly string ConnectionString;
         private List<ReportingOrganisation> reportingOrganisations;
 
+
         public ReportingOrganisationRepository()
         {
 
             reportingOrganisations = new List<ReportingOrganisation>();
 
             ConnectionString = Configuration.ConnectionString;
-
             InitializeRepository();
         }
 
@@ -28,12 +29,19 @@ namespace MusicGlue.ViewModels
                 {
                     while (dr.Read())
                     {
+                        string name = (string)dr["Name"];
                         ReportingOrganisation reportingOrganisation = new ReportingOrganisation
                         {
                             Id = dr.GetInt32(0),
-                            Name = (string)dr["Name"],
+                            Name = name,
                             Country = (string)dr["Country"]
                         };
+
+                        if (name == "OCC")
+                        {
+                            reportingOrganisation.Formatter = new OCCFormatter();
+                        }
+
                         reportingOrganisations.Add(reportingOrganisation);
                     }
                 }

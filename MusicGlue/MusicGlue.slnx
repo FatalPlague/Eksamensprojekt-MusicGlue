@@ -1,4 +1,6 @@
 <Solution>
   <Project Path="MusicGlue/MusicGlue.csproj" />
-  <Project Path="MusicGlueTest/MusicGlueTest.csproj" Id="094b0d08-403d-4559-ba0f-9e59323d66be" />
+  <Project Path="MusicGlueTest/MusicGlueTest.csproj" Id="094b0d08-403d-4559-ba0f-9e59323d66be">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
 </Solution>
