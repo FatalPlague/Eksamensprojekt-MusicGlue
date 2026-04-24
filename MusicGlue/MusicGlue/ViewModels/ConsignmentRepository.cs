@@ -23,12 +23,7 @@ namespace MusicGlue.ViewModels
             {
                 con.Open();
 
-                string query = "SELECT " +
-                    "CONSIGNMENT.Id AS 'ConsignmentId', CONSIGNMENT.CustomerCountry, CONSIGNMENT.ZipCode, CONSIGNMENT.ConsignmentStatus, CONSIGNMENT.ReportingStatus, " +
-                    "MUSICPRODUCT.Id AS 'MusicProductId', MUSICPRODUCT.Price, " +
-                    "PRODUCTDESCRIPTION.Id AS 'ProductDescriptionId', PRODUCTDESCRIPTION.APN, PRODUCTDESCRIPTION.CatalogNumber, PRODUCTDESCRIPTION.SKU, PRODUCTDESCRIPTION.Barcode " +
-                    "FROM CONSIGNMENT, MUSICPRODUCT_CONSIGNMENT, MUSICPRODUCT, PRODUCTDESCRIPTION " +
-                    "WHERE CONSIGNMENT.Id = MUSICPRODUCT_CONSIGNMENT.ConsignmentId AND MUSICPRODUCT.Id = MUSICPRODUCT_CONSIGNMENT.ProductId AND PRODUCTDESCRIPTION.Id = MUSICPRODUCT.ProductDescriptionId";
+                string query = "EXEC spSelectConsignmentsJoinMusicProductsAndProudctDescription";
 
                 SqlCommand cmd = new SqlCommand(query, con);
                 using (SqlDataReader dr = cmd.ExecuteReader())
