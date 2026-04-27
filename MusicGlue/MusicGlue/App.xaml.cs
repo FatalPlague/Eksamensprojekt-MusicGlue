@@ -14,8 +14,9 @@ namespace MusicGlue
         private NavigationStore navigationStore;
         protected override void OnStartup(StartupEventArgs e)
         {
+            //MainViewModel mvm = new MainViewModel(navigationStore);
             navigationStore = new NavigationStore();
-            navigationStore.CurrentViewModel = new HomeViewModel();
+            navigationStore.CurrentViewModel = new HomeViewModel(navigationStore, Dispatcher);
             MainWindow = new MainWindow()
             {
                 DataContext = new MainViewModel(navigationStore)

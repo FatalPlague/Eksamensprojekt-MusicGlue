@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.IO.Enumeration;
 using System.Text;
 using System.Windows.Input;
+using System.Threading;
+using System.Threading;
+using System.Windows.Threading;
+using MusicGlue.Stores;
 
 namespace MusicGlue.ViewModels
 {
@@ -13,11 +17,12 @@ namespace MusicGlue.ViewModels
     {
         private ReportingOrganisationRepository repOrganisationRepo;
         private ConsignmentRepository consignmentRepo;
+        private Dispatcher dispatcher;
 
         private ReportHandler repHandler;
         private string fileName;
 
-        private string _scriptRunStatus;
+        private string _scriptRunStatus = "";
         public string ScriptRunStatus
         {
             get { return _scriptRunStatus; }
@@ -25,20 +30,18 @@ namespace MusicGlue.ViewModels
             {
                 _scriptRunStatus = value;
                 OnPropertyChanged("ScriptRunStatus");
-
-
             }
         }
 
-        public HomeViewModel()
+        public HomeViewModel(NavigationStore navigationStore, Dispatcher dispatcher)
         {
+            this.dispatcher = dispatcher;
             repOrganisationRepo = new ReportingOrganisationRepository();
             consignmentRepo = new ConsignmentRepository();
             repHandler = new ReportHandler();
             fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ".txt";
 
             CheckScriptRunStatus();
-
         }
 
 
@@ -65,10 +68,18 @@ namespace MusicGlue.ViewModels
 
         public void CheckScriptRunStatus()
         {
+            string message = "";
             if (repHandler.CheckReportsHasBeenSend(fileName))
-                ScriptRunStatus = "Todays report has been send";
+            {
+                message = "Todays report has been send";
+            }
             else
-                ScriptRunStatus = "Todays report has not been send";
+                message = "Todays report has not been send";
+
+            dispatcher.Invoke(new Action(() =>
+            {
+                ScriptRunStatus = message;
+            }));
         }
 
         public ICommand StartScriptCommand { get; } = new StartScriptCommand();

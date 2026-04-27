@@ -1,4 +1,5 @@
-﻿using MusicGlue.ViewModels;
+﻿using MusicGlue.Stores;
+using MusicGlue.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,10 +22,7 @@ namespace MusicGlue.Views
     {
         public HomeView()
         {
-            //HomeViewModel hvm = new HomeViewModel();
-            //DataContext = hvm;
             InitializeComponent();
-            
         }
     }
 }
