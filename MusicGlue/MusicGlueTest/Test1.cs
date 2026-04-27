@@ -12,6 +12,8 @@ namespace MusicGlueTest
         List<Consignment> consignments = new List<Consignment>();
         IFormatter formatter;
 
+        ReportHandler reportHandler;
+
 
         [TestInitialize]
         public void init()
@@ -96,12 +98,13 @@ namespace MusicGlueTest
             consignments.Add(c3);
             consignments.Add(c4);
             formatter = new OCCFormatter();
+
+            reportHandler = new ReportHandler();
         }
 
         [TestMethod]
         public void OCCFormatterTest()
         {
-
             string actual = formatter.Format(consignments);
             string expected = "0WC   " + date + Environment.NewLine +
                 "15321900114742000006 00599" + Environment.NewLine +
@@ -128,6 +131,23 @@ namespace MusicGlueTest
                 expected,
                 actual
             );
+        }
+
+        [TestMethod]
+        public void ReportHandlerTest()
+        {
+            //Act
+            string consignmentToReport = formatter.Format(consignments);
+            string fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ">.txt";
+            
+            //check if file already exists
+            if(reportHandler.CheckReportsHasBeenSendToday(fileName))
+                File.Delete(fileName);
+            
+            reportHandler.SaveSendReport(consignmentToReport, fileName);
+
+            //Assert
+            Assert.IsTrue(reportHandler.CheckReportsHasBeenSendToday(fileName));
         }
     }
 }
