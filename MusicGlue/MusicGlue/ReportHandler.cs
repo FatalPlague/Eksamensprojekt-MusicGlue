@@ -16,7 +16,7 @@ namespace MusicGlue
 
         }
 
-        public bool CheckReportsHasBeenSendToday(string fileName)
+        public bool CheckReportsHasBeenSend(string fileName)
         {
             return File.Exists(fileName); // check file already exists
         }
