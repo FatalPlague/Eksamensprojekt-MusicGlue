@@ -5,11 +5,11 @@ VALUES
 
 INSERT INTO CONSIGNMENT (CustomerCountry, ZipCode, ConsignmentStatus, ReportingStatus)
 VALUES
-('England', 2100, 'PreOrdered', 0),
-('Australia', 11455, 'Dispatched', 0),
-('England', 5003, 'PreOrdered', 0),
-('Australia', 33100, 'NotDispatched', 0),
-('England', 10115, 'Dispatched', 0);
+('England', 'WC', 1, 0),
+('Australia', 11455, 2, 0),
+('England', 'N', 1, 0),
+('Australia', 33100, 0, 0),
+('England', 'YO', 2, 0);
 
 INSERT INTO PRODUCTDESCRIPTION (APN, CatalogNumber, SKU, Barcode)
 VALUES

@@ -11,5 +11,6 @@ namespace MusicGlue.Models
         public string Country { get; set; }
         public string Format { get; set; }
         public string IdentificationType { get; set; }
+        public IFormatter Formatter { get; set; }
     }
 }

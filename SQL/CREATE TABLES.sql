@@ -16,7 +16,7 @@ CREATE TABLE CONSIGNMENT (
 Id Int IDENTITY(1,1),
 CustomerCountry NVarChar(50) NOT NULL,
 ZipCode NVarChar(50) NOT NULL,
-ConsignmentStatus NVarChar(50) NOT NULL,
+ConsignmentStatus Int NOT NULL,
 ReportingStatus Bit NOT NULL,
 
 CONSTRAINT PK_CONSIGNMENT PRIMARY KEY(Id)
