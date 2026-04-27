@@ -1,3 +1,4 @@
+use MusicGlue
 INSERT INTO REPORTINGORGANISATION (Name, Country)
 VALUES
 ('OCC', 'England'),
@@ -6,9 +7,9 @@ VALUES
 INSERT INTO CONSIGNMENT (CustomerCountry, ZipCode, ConsignmentStatus, ReportingStatus)
 VALUES
 ('England', 'WC', 1, 0),
-('Australia', 11455, 2, 0),
-('England', 'N', 1, 0),
-('Australia', 33100, 0, 0),
+('Australia', '11455', 2, 0),
+('England', 'N', 0, 0),
+('Australia', '33100', 0, 0),
 ('England', 'YO', 2, 0);
 
 INSERT INTO PRODUCTDESCRIPTION (APN, CatalogNumber, SKU, Barcode)
@@ -21,11 +22,11 @@ VALUES
 
 INSERT INTO MUSICPRODUCT (Price, ProductDescriptionId)
 VALUES
-(129.95, 1),
-(89.50, 2),
-(149.00, 3),
-(199.00, 4),
-(59.95, 5);
+(111.95, 1),
+(8.50, 2),
+(2.75, 3),
+(5.00, 4),
+(17.00, 5);
 
 INSERT INTO MUSICPRODUCT_CONSIGNMENT (ProductId, ConsignmentId)
 VALUES

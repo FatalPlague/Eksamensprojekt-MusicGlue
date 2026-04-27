@@ -1,5 +1,5 @@
-drop database MusicGlue
-go
+--drop database MusicGlue
+--go
 CREATE DATABASE MusicGlue
 go
 use MusicGlue
