@@ -138,16 +138,16 @@ namespace MusicGlueTest
         {
             //Act
             string consignmentToReport = formatter.Format(consignments);
-            string fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ">.txt";
+            string fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ".txt";
             
             //check if file already exists
-            if(reportHandler.CheckReportsHasBeenSendToday(fileName))
+            if(reportHandler.CheckReportsHasBeenSend(fileName))
                 File.Delete(fileName);
             
             reportHandler.SaveSendReport(consignmentToReport, fileName);
 
             //Assert
-            Assert.IsTrue(reportHandler.CheckReportsHasBeenSendToday(fileName));
+            Assert.IsTrue(reportHandler.CheckReportsHasBeenSend(fileName));
         }
     }
 }
