@@ -23,7 +23,7 @@ namespace MusicGlue.ViewModels
             {
                 con.Open();
 
-                string query = "EXEC spSelectConsignmentsJoinMusicProductsAndProudctDescription";
+                string query = "EXEC spSelectConsignmentsJoinMusicProductsAndProductDescription";
 
                 SqlCommand cmd = new SqlCommand(query, con);
                 using (SqlDataReader dr = cmd.ExecuteReader())
