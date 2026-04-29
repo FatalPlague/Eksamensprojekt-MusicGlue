@@ -61,33 +61,50 @@ namespace MusicGlue.ViewModels
             if (!repHandler.CheckReportsHasBeenSend(fileName))
             {
                 List<ReportingOrganisation> repOrgs = repOrganisationRepo.GetAll();
+                List<Consignment> consignments = new List<Consignment>();
                 string formattedConsignments = "";
                 repOrgs.ForEach(repOrg =>
                 {
-                    List<Consignment> consignments = consignmentRepo.GetByCustomerCountry(repOrg.Country);
+                    consignments = consignmentRepo.GetByCustomerCountry(repOrg.Country);
                     if (repOrg.Formatter != null)
                         formattedConsignments = repOrg.Formatter.Format(consignments);
                 });
                 repHandler.SaveSendReport(formattedConsignments, fileName);
 
                 CheckScriptRunStatus();
+
+                //if (CheckScriptRunStatus())
+                //{
+                //    consignments.ForEach(consignment =>
+                //    {
+                //        consignment.ReportingStatus = true;
+                //        consignmentRepo.Update(consignment);
+                //    });
+                //}
             }
         }
 
-        public void CheckScriptRunStatus()
+        public bool CheckScriptRunStatus()
         {
             string message = "";
+            bool result = false;
             if (repHandler.CheckReportsHasBeenSend(fileName))
             {
                 message = "Today's report has been sent";
+                result = true;
             }
             else
+            {
                 message = "Today's report has not been sent";
+                result = false;
+            }
 
             dispatcher.Invoke(new Action(() =>
             {
                 ScriptRunStatus = message;
             }));
+
+            return result;
         }
 
         public ICommand StartScriptCommand { get; } = new StartScriptCommand();

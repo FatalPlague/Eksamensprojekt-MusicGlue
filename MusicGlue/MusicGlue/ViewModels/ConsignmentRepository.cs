@@ -79,12 +79,12 @@ namespace MusicGlue.ViewModels
                 con.Open();
 
                 string query = "UPDATE CONSIGNMENT " +
-                    "SET CONSIGNMENT.ReportingStatus = @CONSIGNMENT.ReportingStatus " +
+                    "SET ReportingStatus = @ReportingStatus " +
                     "WHERE Id = @Id";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Parameters.Add("@CONSIGNMENT.ReportingStatus", SqlDbType.Bit).Value = consignmentToBeUpdated.ReportingStatus;
+                    cmd.Parameters.Add("@ReportingStatus", SqlDbType.Bit).Value = consignmentToBeUpdated.ReportingStatus;
                     cmd.Parameters.Add("@Id", SqlDbType.Int).Value = consignmentToBeUpdated.Id;
 
                     cmd.ExecuteNonQuery();
