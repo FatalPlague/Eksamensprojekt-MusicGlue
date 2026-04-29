@@ -92,6 +92,23 @@ namespace MusicGlue.ViewModels
             }
         }
 
+        public void ResetReportingStatus()
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                string query = "UPDATE CONSIGNMENT " +
+                    "SET ReportingStatus = @ReportingStatus";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.Add("@ReportingStatus", SqlDbType.Bit).Value = false;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         public List<Consignment> GetByCustomerCountry(string country)
         {
             return consignments.FindAll(o => o.CustomerCountry == country);

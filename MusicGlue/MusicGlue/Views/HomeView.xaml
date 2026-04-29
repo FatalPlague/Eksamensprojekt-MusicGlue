@@ -37,7 +37,7 @@
         <TextBlock Text="{Binding Path=TodaysDate}" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="72"/>
         <TextBlock Text="{Binding Path=ScriptRunStatus}" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="52"/>
         <Button Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="4" Width="650" Height="72" Background="#4abeb1" Content="START REPORTING SCRIPT" Foreground="White" FontSize="48" Command="{Binding Path=StartScriptCommand}" CommandParameter="{Binding}"/>
-
+        <Button Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="4" Width="650" Height="72" Background="#4abeb1" Content="RESET (FOR TESTING ONLY)" Foreground="White" FontSize="48" Command="{Binding Path=ResetReportStatusAndDeleteFileCommand}" CommandParameter="{Binding}"/>
 
 
 

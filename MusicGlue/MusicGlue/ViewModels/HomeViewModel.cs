@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading;
 using System.Windows.Threading;
 using MusicGlue.Stores;
+using System.IO;
 
 namespace MusicGlue.ViewModels
 {
@@ -85,6 +86,16 @@ namespace MusicGlue.ViewModels
                 });
             }
         }
+
+        public void ResetReportingStatusAndDeleteFile() // this method is for testing only
+        {
+            _consignmentRepo.ResetReportingStatus();
+            if (File.Exists(_fileName))
+            {
+                File.Delete(_fileName);
+            }
+            CheckScriptRunStatus();
+        }
         
 
         public bool CheckScriptRunStatus()
@@ -111,5 +122,6 @@ namespace MusicGlue.ViewModels
         }
 
         public ICommand StartScriptCommand { get; } = new StartScriptCommand();
+        public ICommand ResetReportStatusAndDeleteFileCommand { get; } = new ResetReportStatusAndDeleteFileCommand();
     }
 }
