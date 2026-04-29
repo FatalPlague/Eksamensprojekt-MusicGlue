@@ -141,13 +141,13 @@ namespace MusicGlueTest
             string fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ".txt";
             
             //check if file already exists
-            if(reportHandler.CheckReportsHasBeenSend(fileName))
+            if(reportHandler.CheckReportHasBeenSent(fileName))
                 File.Delete(fileName);
             
             reportHandler.SaveSendReport(consignmentToReport, fileName);
 
             //Assert
-            Assert.IsTrue(reportHandler.CheckReportsHasBeenSend(fileName));
+            Assert.IsTrue(reportHandler.CheckReportHasBeenSent(fileName));
         }
     }
 }

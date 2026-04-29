@@ -15,12 +15,12 @@ namespace MusicGlue.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
-        private ReportingOrganisationRepository repOrganisationRepo;
-        private ConsignmentRepository consignmentRepo;
-        private Dispatcher dispatcher;
+        private ReportingOrganisationRepository _repOrganisationRepo;
+        private ConsignmentRepository _consignmentRepo;
+        private Dispatcher _dispatcher;
 
-        private ReportHandler repHandler;
-        private string fileName;
+        private ReportHandler _repHandler;
+        private string _fileName;
 
         private string _scriptRunStatus = "";
         public string ScriptRunStatus
@@ -45,12 +45,12 @@ namespace MusicGlue.ViewModels
 
         public HomeViewModel(NavigationStore navigationStore, Dispatcher dispatcher)
         {
-            this.dispatcher = dispatcher;
-            repOrganisationRepo = new ReportingOrganisationRepository();
-            consignmentRepo = new ConsignmentRepository();
-            repHandler = new ReportHandler();
+            this._dispatcher = dispatcher;
+            _repOrganisationRepo = new ReportingOrganisationRepository();
+            _consignmentRepo = new ConsignmentRepository();
+            _repHandler = new ReportHandler();
             TodaysDate = DateTime.Now.ToString("yyyy-MM-dd");
-            fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ".txt";
+            _fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ".txt";
 
             CheckScriptRunStatus();
         }
@@ -58,17 +58,17 @@ namespace MusicGlue.ViewModels
 
         public void StartScript()
         {
-            if (!repHandler.CheckReportsHasBeenSend(fileName))
+            if (!_repHandler.CheckReportHasBeenSent(_fileName))
             {
-                List<ReportingOrganisation> repOrgs = repOrganisationRepo.GetAll();
+                List<ReportingOrganisation> repOrgs = _repOrganisationRepo.GetAll();
                 string formattedConsignments = "";
                 repOrgs.ForEach(repOrg =>
                 {
-                    List<Consignment> consignments = consignmentRepo.GetByCustomerCountry(repOrg.Country);
+                    List<Consignment> consignments = _consignmentRepo.GetByCustomerCountry(repOrg.Country);
                     if (repOrg.Formatter != null)
                         formattedConsignments = repOrg.Formatter.Format(consignments);
                 });
-                repHandler.SaveSendReport(formattedConsignments, fileName);
+                _repHandler.SaveSendReport(formattedConsignments, _fileName);
 
                 CheckScriptRunStatus();
             }
@@ -77,14 +77,14 @@ namespace MusicGlue.ViewModels
         public void CheckScriptRunStatus()
         {
             string message = "";
-            if (repHandler.CheckReportsHasBeenSend(fileName))
+            if (_repHandler.CheckReportHasBeenSent(_fileName))
             {
                 message = "Today's report has been sent";
             }
             else
                 message = "Today's report has not been sent";
 
-            dispatcher.Invoke(new Action(() =>
+            _dispatcher.Invoke(new Action(() =>
             {
                 ScriptRunStatus = message;
             }));
