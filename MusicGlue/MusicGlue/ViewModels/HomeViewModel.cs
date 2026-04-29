@@ -75,20 +75,20 @@ namespace MusicGlue.ViewModels
 
                 //if (CheckScriptRunStatus())
                 //{
-                //    consignments.ForEach(consignment =>
-                //    {
-                //        consignment.ReportingStatus = true;
-                //        consignmentRepo.Update(consignment);
-                //    });
-                //}
+                consignments.ForEach(consignment =>
+                {
+                    consignment.ReportingStatus = true;
+                    _consignmentRepo.Update(consignment);
+                });
             }
         }
+        
 
         public bool CheckScriptRunStatus()
         {
             string message = "";
             bool result = false;
-            if (_repHandler.CheckReportsHasBeenSend(fileName))
+            if (_repHandler.CheckReportHasBeenSent(_fileName))
             {
                 message = "Today's report has been sent";
                 result = true;
