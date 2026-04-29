@@ -7,16 +7,17 @@ namespace MusicGlue
 {
     public class ReportHandler
     {
-        public void SaveSendReport(string report, string fileName)
+        //Method simulates sending reports, hence the double name
+        public void SaveSendReport(string formattedConsignments, string fileName)
         {
             using (StreamWriter sw = new StreamWriter(fileName)) //open ressource, write report into file and close again.
             {
-                sw.Write(report);
+                sw.Write(formattedConsignments);
             }
 
         }
 
-        public bool CheckReportsHasBeenSend(string fileName)
+        public bool CheckReportHasBeenSent(string fileName)
         {
             return File.Exists(fileName); // check file already exists
         }

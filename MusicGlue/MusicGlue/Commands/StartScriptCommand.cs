@@ -9,7 +9,7 @@ namespace MusicGlue.Commands
 {
     public class StartScriptCommand : ICommand
     {
-        Thread scriptThread;
+        private Thread _scriptThread;
         public event EventHandler? CanExecuteChanged;
 
         public bool CanExecute(object? parameter)
@@ -21,8 +21,8 @@ namespace MusicGlue.Commands
         {
             if (parameter is HomeViewModel hvm)
             {
-                scriptThread = new(hvm.StartScript);
-                scriptThread.Start();
+                _scriptThread = new(hvm.StartScript);
+                _scriptThread.Start();
             }
         }
     }
