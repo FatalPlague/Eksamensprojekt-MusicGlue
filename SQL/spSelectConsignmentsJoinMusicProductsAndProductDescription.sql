@@ -1,4 +1,4 @@
-CREATE PROCEDURE spSelectConsignmentsJoinMusicProductsAndProducctDescription AS
+CREATE PROCEDURE spSelectConsignmentsJoinMusicProductsAndProductDescription AS
 BEGIN
 	SELECT
 		CONSIGNMENT.Id AS 'ConsignmentId', 

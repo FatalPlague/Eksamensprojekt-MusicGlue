@@ -61,21 +61,24 @@ namespace MusicGlue.ViewModels
             if (!_repHandler.CheckReportHasBeenSent(_fileName))
             {
                 List<ReportingOrganisation> repOrgs = _repOrganisationRepo.GetAll();
-                List<Consignment> consignments = new List<Consignment>();
+                List<Consignment> allFormattedConsignments = new List<Consignment>();
+
                 string formattedConsignments = "";
                 repOrgs.ForEach(repOrg =>
                 {
                     List<Consignment> consignments = _consignmentRepo.GetByCustomerCountry(repOrg.Country);
-                    if (repOrg.Formatter != null)
-                        formattedConsignments = repOrg.Formatter.Format(consignments);
-                });
-                _repHandler.SaveSendReport(formattedConsignments, _fileName);
 
+                    if (repOrg.Formatter != null)
+                    {
+                        formattedConsignments = repOrg.Formatter.Format(consignments);
+                        allFormattedConsignments.AddRange(consignments);
+                    }
+                });
+
+                _repHandler.SaveSendReport(formattedConsignments, _fileName);
                 CheckScriptRunStatus();
 
-                //if (CheckScriptRunStatus())
-                //{
-                consignments.ForEach(consignment =>
+                allFormattedConsignments.ForEach(consignment =>
                 {
                     consignment.ReportingStatus = true;
                     _consignmentRepo.Update(consignment);
