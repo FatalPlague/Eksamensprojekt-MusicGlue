@@ -92,7 +92,12 @@ namespace MusicGlue.ViewModels
             }
         }
 
-        public void ResetReportingStatus()
+        public List<Consignment> GetByCustomerCountry(string country)
+        {
+            return consignments.FindAll(o => o.CustomerCountry == country);
+        }
+
+        public void ResetReportingStatus() // for testing purposes only
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
@@ -107,11 +112,6 @@ namespace MusicGlue.ViewModels
                     cmd.ExecuteNonQuery();
                 }
             }
-        }
-
-        public List<Consignment> GetByCustomerCountry(string country)
-        {
-            return consignments.FindAll(o => o.CustomerCountry == country);
         }
     }
 }

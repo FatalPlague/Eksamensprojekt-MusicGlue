@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace MusicGlue.Commands
 {
-    public class ResetReportStatusAndDeleteFileCommand : ICommand
+    public class ResetCommand : ICommand
     {
         private Thread _resetThread;
         public event EventHandler? CanExecuteChanged;

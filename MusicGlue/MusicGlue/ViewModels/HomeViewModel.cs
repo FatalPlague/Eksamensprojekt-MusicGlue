@@ -122,6 +122,6 @@ namespace MusicGlue.ViewModels
         }
 
         public ICommand StartScriptCommand { get; } = new StartScriptCommand();
-        public ICommand ResetReportStatusAndDeleteFileCommand { get; } = new ResetReportStatusAndDeleteFileCommand();
+        public ICommand ResetCommand { get; } = new ResetCommand();
     }
 }
