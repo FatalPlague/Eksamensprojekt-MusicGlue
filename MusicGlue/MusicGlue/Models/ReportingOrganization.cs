@@ -9,8 +9,6 @@ namespace MusicGlue.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
-        public string Format { get; set; }
-        public string IdentificationType { get; set; }
         public IFormatter Formatter { get; set; }
     }
 }
