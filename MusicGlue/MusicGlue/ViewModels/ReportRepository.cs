@@ -22,7 +22,6 @@ namespace MusicGlue.ViewModels
 
         public void Create(Report reportToBeCreated)
         {
-            reports.Add(reportToBeCreated);
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
@@ -35,6 +34,8 @@ namespace MusicGlue.ViewModels
                     cmd.Parameters.Add("@TotalSales", SqlDbType.Int).Value = reportToBeCreated.TotalSales;
                     cmd.Parameters.Add("@ReportStatus", SqlDbType.Int).Value = reportToBeCreated.ReportStatus;
                     cmd.Parameters.Add("@ReportingOrganisationId", SqlDbType.Int).Value = reportToBeCreated.ReportingOrganisationId;
+
+                    reports.Add(reportToBeCreated);
                 }
             }
         }
@@ -81,6 +82,10 @@ namespace MusicGlue.ViewModels
                     cmd.Parameters.Add("@Id", SqlDbType.Int).Value = reportToBeUpdated.Id;
 
                     cmd.ExecuteNonQuery();
+
+                    Report report = reports.Find(report => report.Id == reportToBeUpdated.Id ? report=reportToBeUpdated);
+                    report.ReportStatus = reportToBeUpdated.ReportStatus;
+                    report.FileName = reportToBeUpdated.FileName;
                 }
             }
         }
