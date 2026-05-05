@@ -41,7 +41,7 @@ namespace MusicGlue.ViewModels
                                 CustomerCountry = (string)dr["CustomerCountry"],
                                 ZipCode = (string)dr["ZipCode"],
                                 ConsignmentStatus = (ConsignmentStatus)dr["ConsignmentStatus"],
-                                ReportingStatus = (bool)dr["ReportingStatus"],
+                                ReportingStatus = (ConsignmentReportingStatus)dr["ReportingStatus"],
                                 MusicProducts = new List<MusicProduct>()
                             };
 
@@ -88,6 +88,9 @@ namespace MusicGlue.ViewModels
                     cmd.Parameters.Add("@Id", SqlDbType.Int).Value = consignmentToBeUpdated.Id;
 
                     cmd.ExecuteNonQuery();
+
+                    Consignment consignment = consignments.Find(consignment => consignment.Id == consignmentToBeUpdated.Id);
+                    consignment.ReportingStatus = consignmentToBeUpdated.ReportingStatus;
                 }
             }
         }
