@@ -83,7 +83,7 @@ namespace MusicGlue.ViewModels
 
                     cmd.ExecuteNonQuery();
 
-                    Report report = reports.Find(report => report.Id == reportToBeUpdated.Id ? report=reportToBeUpdated);
+                    Report report = reports.Find(report => report.Id == reportToBeUpdated.Id);
                     report.ReportStatus = reportToBeUpdated.ReportStatus;
                     report.FileName = reportToBeUpdated.FileName;
                 }

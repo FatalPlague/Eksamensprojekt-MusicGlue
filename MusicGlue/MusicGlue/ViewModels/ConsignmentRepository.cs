@@ -88,6 +88,9 @@ namespace MusicGlue.ViewModels
                     cmd.Parameters.Add("@Id", SqlDbType.Int).Value = consignmentToBeUpdated.Id;
 
                     cmd.ExecuteNonQuery();
+
+                    Consignment consignment = consignments.Find(consignment => consignment.Id == consignmentToBeUpdated.Id);
+                    consignment.ReportingStatus = consignmentToBeUpdated.ReportingStatus;
                 }
             }
         }
