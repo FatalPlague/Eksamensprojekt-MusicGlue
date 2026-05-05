@@ -8,17 +8,17 @@ namespace MusicGlue.Services
 {
     public class NavigationService
     {
-        private readonly NavigationStore _navigationStore;
-        private readonly Func<BaseViewModel> _viewModelFactory;
+        private readonly NavigationStore navigationStore;
+        private readonly Func<BaseViewModel> viewModelFactory;
 
         public NavigationService(NavigationStore navigationStore, Func<BaseViewModel> viewModelFactory)
         {
-            this._navigationStore = navigationStore;
-            this._viewModelFactory = viewModelFactory;
+            this.navigationStore = navigationStore;
+            this.viewModelFactory = viewModelFactory;
         }
         public void Navigate()
         {
-            _navigationStore.CurrentViewModel = _viewModelFactory();
+            navigationStore.CurrentViewModel = viewModelFactory();
         }
     }
 }

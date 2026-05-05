@@ -11,19 +11,19 @@ namespace MusicGlue.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly NavigationStore _navigationStore;
+        private readonly NavigationStore navigationStore;
 
         public BaseViewModel CurrentViewModel
         {
             get
             {
-                return _navigationStore.CurrentViewModel;
+                return navigationStore.CurrentViewModel;
             }
         }
 
         public MainViewModel(NavigationStore navigationStore)
         {
-            this._navigationStore = navigationStore;
+            this.navigationStore = navigationStore;
             navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }
 

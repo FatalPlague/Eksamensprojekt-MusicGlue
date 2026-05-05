@@ -8,7 +8,7 @@ namespace MusicGlue.Commands
 {
     public class ResetCommand : ICommand
     {
-        private Thread _resetThread;
+        private Thread resetThread;
         public event EventHandler? CanExecuteChanged;
 
         public bool CanExecute(object? parameter)
@@ -20,8 +20,8 @@ namespace MusicGlue.Commands
         {
             if (parameter is HomeViewModel hvm)
             {
-                _resetThread = new Thread(hvm.ResetReportingStatusAndDeleteFile);
-                _resetThread.Start();
+                resetThread = new Thread(hvm.ResetReportingStatusAndDeleteFile);
+                resetThread.Start();
             }
         }
     }

@@ -16,12 +16,11 @@ namespace MusicGlue.ViewModels
 {
     public class HomeViewModel : BaseViewModel
     {
-        private ReportingOrganisationRepository _repOrganisationRepo;
-        private ConsignmentRepository _consignmentRepo;
-        private Dispatcher _dispatcher;
+        private ReportingOrganisationRepository repOrganisationRepo;
+        private ConsignmentRepository consignmentRepo;
+        private Dispatcher dispatcher;
 
-        private ReportHandler _repHandler;
-        private string _fileName;
+        private string fileName;
 
         private string _scriptRunStatus = "";
         public string ScriptRunStatus
@@ -34,11 +33,11 @@ namespace MusicGlue.ViewModels
             }
         }
         private string _todaysDate = "";
-        public string TodaysDate 
-        { 
+        public string TodaysDate
+        {
             get { return _todaysDate; }
-            set 
-            { 
+            set
+            {
                 _todaysDate = value;
                 OnPropertyChanged("TodaysDate");
             }
@@ -46,12 +45,11 @@ namespace MusicGlue.ViewModels
 
         public HomeViewModel(NavigationStore navigationStore, Dispatcher dispatcher)
         {
-            this._dispatcher = dispatcher;
-            _repOrganisationRepo = new ReportingOrganisationRepository();
-            _consignmentRepo = new ConsignmentRepository();
-            _repHandler = new ReportHandler();
+            this.dispatcher = dispatcher;
+            repOrganisationRepo = new ReportingOrganisationRepository();
+            consignmentRepo = new ConsignmentRepository();
             TodaysDate = DateTime.Now.ToString("yyyy-MM-dd");
-            _fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ".txt";
+            fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ".txt";
 
             CheckScriptRunStatus();
         }
@@ -59,15 +57,15 @@ namespace MusicGlue.ViewModels
 
         public void StartScript()
         {
-            if (!_repHandler.CheckReportHasBeenSent(_fileName))
+            if (!ReportHandler.CheckReportHasBeenSent(fileName))
             {
-                List<ReportingOrganisation> repOrgs = _repOrganisationRepo.GetAll();
+                List<ReportingOrganisation> repOrgs = repOrganisationRepo.GetAll();
                 List<Consignment> allFormattedConsignments = new List<Consignment>();
 
                 string formattedConsignments = "";
                 repOrgs.ForEach(repOrg =>
                 {
-                    List<Consignment> consignments = _consignmentRepo.GetByCustomerCountry(repOrg.Country);
+                    List<Consignment> consignments = consignmentRepo.GetByCustomerCountry(repOrg.Country);
 
                     if (repOrg.Formatter != null)
                     {
@@ -76,33 +74,33 @@ namespace MusicGlue.ViewModels
                     }
                 });
 
-                _repHandler.SaveSendReport(formattedConsignments, _fileName);
+                ReportHandler.SaveSendReport(formattedConsignments, fileName);
                 CheckScriptRunStatus();
 
                 allFormattedConsignments.ForEach(consignment =>
                 {
                     consignment.ReportingStatus = true;
-                    _consignmentRepo.Update(consignment);
+                    consignmentRepo.Update(consignment);
                 });
             }
         }
 
         public void ResetReportingStatusAndDeleteFile() // this method is for testing only
         {
-            _consignmentRepo.ResetReportingStatus();
-            if (File.Exists(_fileName))
+            consignmentRepo.ResetReportingStatus();
+            if (File.Exists(fileName))
             {
-                File.Delete(_fileName);
+                File.Delete(fileName);
             }
             CheckScriptRunStatus();
         }
-        
+
 
         public bool CheckScriptRunStatus()
         {
             string message = "";
             bool result = false;
-            if (_repHandler.CheckReportHasBeenSent(_fileName))
+            if (ReportHandler.CheckReportHasBeenSent(fileName))
             {
                 message = "Today's report has been sent";
                 result = true;
@@ -113,7 +111,7 @@ namespace MusicGlue.ViewModels
                 result = false;
             }
 
-            _dispatcher.Invoke(new Action(() =>
+            dispatcher.Invoke(new Action(() =>
             {
                 ScriptRunStatus = message;
             }));

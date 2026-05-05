@@ -12,9 +12,6 @@ namespace MusicGlueTest
         List<Consignment> consignments = new List<Consignment>();
         IFormatter formatter;
 
-        ReportHandler reportHandler;
-
-
         [TestInitialize]
         public void init()
         {
@@ -98,8 +95,6 @@ namespace MusicGlueTest
             consignments.Add(c3);
             consignments.Add(c4);
             formatter = new OCCFormatter();
-
-            reportHandler = new ReportHandler();
         }
 
         [TestMethod]
@@ -141,13 +136,13 @@ namespace MusicGlueTest
             string fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ".txt";
             
             //check if file already exists
-            if(reportHandler.CheckReportHasBeenSent(fileName))
+            if(ReportHandler.CheckReportHasBeenSent(fileName))
                 File.Delete(fileName);
-            
-            reportHandler.SaveSendReport(consignmentToReport, fileName);
+
+            ReportHandler.SaveSendReport(consignmentToReport, fileName);
 
             //Assert
-            Assert.IsTrue(reportHandler.CheckReportHasBeenSent(fileName));
+            Assert.IsTrue(ReportHandler.CheckReportHasBeenSent(fileName));
         }
     }
 }
