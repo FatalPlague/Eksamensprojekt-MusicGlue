@@ -73,12 +73,14 @@ namespace MusicGlue.ViewModels
                 con.Open();
 
                 string query = "UPDATE REPORT " +
-                    "SET ReportStatus = @ReportStatus " +
+                    "SET ReportStatus = @ReportStatus, " +
+                    "FileName = @FileName " + 
                     "WHERE Id = @Id";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.Add("@ReportStatus", SqlDbType.Int).Value = reportToBeUpdated.ReportStatus;
+                    cmd.Parameters.Add("@FileName", SqlDbType.NVarChar).Value = reportToBeUpdated.FileName;
                     cmd.Parameters.Add("@Id", SqlDbType.Int).Value = reportToBeUpdated.Id;
 
                     cmd.ExecuteNonQuery();
