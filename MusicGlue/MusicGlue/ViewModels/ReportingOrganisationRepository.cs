@@ -6,7 +6,7 @@ namespace MusicGlue.ViewModels
 {
     public class ReportingOrganisationRepository
     {
-        private readonly string ConnectionString;
+        private readonly string connectionString;
         private List<ReportingOrganisation> reportingOrganisations;
 
 
@@ -15,13 +15,13 @@ namespace MusicGlue.ViewModels
 
             reportingOrganisations = new List<ReportingOrganisation>();
 
-            ConnectionString = Configuration.ConnectionString;
+            connectionString = Configuration.ConnectionString;
             InitializeRepository();
         }
 
         private void InitializeRepository()
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
                 SqlCommand cmd = new SqlCommand("SELECT Id, Name, Country FROM REPORTINGORGANISATION", con);

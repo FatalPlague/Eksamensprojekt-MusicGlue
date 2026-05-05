@@ -13,10 +13,12 @@ namespace MusicGlue.Models
         
     public class Report
     {
+        public int Id { get; set; }
         public string FileName {  get; set; }
         public DateTime ReportingDate { get; set; }
         public int TotalSales { get; set; }
         public ReportStatus ReportStatus { get; set; }
         public List<int> ConsignmentIds { get; set; } 
+        public int ReportingOrganisationId { get; set; }
     }
 }
