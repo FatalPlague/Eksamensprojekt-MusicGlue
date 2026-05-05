@@ -1,5 +1,18 @@
 ﻿namespace MusicGlue.Models
 {
+    public enum ConsignmentStatus
+    {
+        NotDispatched,
+        PreOrdered,
+        Dispatched
+    }
+
+    public enum ConsignmentReportingStatus
+    {
+        Reported,
+        NotReported
+    }
+    
     public class Consignment
     {
         public int Id { get; set; }
@@ -10,11 +23,5 @@
 
         public List<MusicProduct> MusicProducts { get; set; }
     }
-
-    public enum ConsignmentStatus
-    {
-        NotDispatched,
-        PreOrdered,
-        Dispatched
-    }
+        
 }
