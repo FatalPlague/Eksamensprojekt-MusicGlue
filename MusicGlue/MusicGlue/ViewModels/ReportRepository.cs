@@ -23,6 +23,20 @@ namespace MusicGlue.ViewModels
         public void Create(Report reportToBeCreated)
         {
             reports.Add(reportToBeCreated);
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO Report (Id, FileName, ReportingDate, TotalSales, Reportstatus, ReportingOrganisationId) " +
+                     "VALUES(@Id, @FileName, @ReportingDate, @TotalSales, @ReportStatus, @ReportingOrganisationId)" + "SELECT @@IDENTITY", con))
+                {
+                    cmd.Parameters.Add("@Id", SqlDbType.Int).Value = reportToBeCreated.Id;
+                    cmd.Parameters.Add("@FileName", SqlDbType.NVarChar).Value = reportToBeCreated.FileName;
+                    cmd.Parameters.Add("@ReportingDate", SqlDbType.DateTime).Value = reportToBeCreated.ReportingDate;
+                    cmd.Parameters.Add("@TotalSales", SqlDbType.Int).Value = reportToBeCreated.TotalSales;
+                    cmd.Parameters.Add("@ReportStatus", SqlDbType.Int).Value = reportToBeCreated.ReportStatus;
+                    cmd.Parameters.Add("@ReportingOrganisationId", SqlDbType.Int).Value = reportToBeCreated.ReportingOrganisationId;
+                }
+            }
         }
 
         private void InitializeRepository()
