@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MusicGlue.Views.HomeView"
+﻿<UserControl x:Class="MusicGlue.Views.Overview"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -31,13 +31,12 @@
 
         <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" Grid.RowSpan="2" Fill="#251b40"/>
         <Image Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Source="/Images/google_icon_2.png"/>
-        <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Background="White" Content="HOMEPAGE" Foreground="#251b40" FontSize="72"/>
-        <Button Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="2" Background="#251b40" Content="OVERVIEW" Foreground="White" FontSize="72" Click="Button_Click" Command="{Binding NavigateToOverviewCommand}"/>
-        <TextBlock Text="Today's date:" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="72"/>
-        <TextBlock Text="{Binding Path=TodaysDate}" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="72"/>
-        <TextBlock Text="{Binding Path=ScriptRunStatus}" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="52"/>
-        <Button Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="4" Width="650" Height="72" Background="#4abeb1" Content="START REPORTING SCRIPT" Foreground="White" FontSize="48" Command="{Binding Path=StartScriptCommand}" CommandParameter="{Binding}"/>
-        <Button Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="4" Width="650" Height="72" Background="#4abeb1" Content="RESET (FOR TESTING ONLY)" Foreground="White" FontSize="48" Command="{Binding Path=ResetCommand}" CommandParameter="{Binding}"/>
+        <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Background="#251b40" Content="HOMEPAGE" Foreground="White" FontSize="72" Command="{Binding NavigateToHomeViewCommand}"/>
+        <Button Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="2" Background="White" Content="OVERVIEW" Foreground="#251b40" FontSize="72"/>
+        <Button Grid.Row="7" Grid.Column="6" Grid.ColumnSpan="2" Background="#fac955" Content="RESEND REPORT" Foreground="#251b40" FontSize="48" Margin="25,25,25,25"/>
+        <DataGrid ColumnWidth="*"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="8" Grid.RowSpan="5" Margin="25,50,25,0" ItemsSource="{Binding Reports}" BorderBrush="Black" BorderThickness="4">
+            
+        </DataGrid>
 
 
 

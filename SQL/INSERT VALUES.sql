@@ -37,3 +37,14 @@ VALUES
 (4, 4),
 (1, 5),
 (3, 5);
+
+INSERT INTO REPORT (FileName, ReportingDate, TotalSales, ReportStatus, ReportingOrganisationId) VALUES
+('report_jan_2026.csv', '2026-01-31', 15000, 1, 1),
+('report_feb_2026.csv', '2026-02-28', 22000, 0, 1),
+('report_mar_2026.csv', '2026-03-31', 18000, 0, 1);
+
+INSERT INTO REPORT_CONSIGNMENT (ReportId, ConsignmentId) VALUES
+(1,1),
+(1,2),
+(2,3),
+(3,4);

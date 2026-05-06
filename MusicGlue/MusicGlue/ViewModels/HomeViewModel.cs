@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows.Threading;
 using MusicGlue.Stores;
 using System.IO;
+using MusicGlue.Services;
 
 namespace MusicGlue.ViewModels
 {
@@ -19,6 +20,8 @@ namespace MusicGlue.ViewModels
         private ReportingOrganisationRepository repOrganisationRepo;
         private ConsignmentRepository consignmentRepo;
         private Dispatcher dispatcher;
+
+        public ICommand NavigateToOverviewCommand { get; }
 
         private string fileName;
 
@@ -52,6 +55,9 @@ namespace MusicGlue.ViewModels
             fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ".txt";
 
             CheckScriptRunStatus();
+
+            NavigateToOverviewCommand = new NavigateCommand(new NavigationService(navigationStore, () => new OverviewViewModel(navigationStore, dispatcher)));
+
         }
 
 
@@ -79,7 +85,7 @@ namespace MusicGlue.ViewModels
 
                 allFormattedConsignments.ForEach(consignment =>
                 {
-                    consignment.ReportingStatus = true;
+                    consignment.ReportingStatus = ConsignmentReportingStatus.Reported;
                     consignmentRepo.Update(consignment);
                 });
             }
