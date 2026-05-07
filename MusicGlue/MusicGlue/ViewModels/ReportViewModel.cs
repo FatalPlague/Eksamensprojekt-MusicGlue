@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MusicGlue.ViewModels
 {
-    public class ReportViewModel : ReportRepository
+    public class ReportViewModel
     {
         private Report report;
 
