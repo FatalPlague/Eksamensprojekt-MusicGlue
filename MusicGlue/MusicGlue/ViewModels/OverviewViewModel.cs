@@ -29,6 +29,19 @@ namespace MusicGlue.ViewModels
 
         }
 
+        public void Resend()
+        {
+            List<ReportViewModel> reports = Reports.Where(report => report.Selected).ToList();
+            foreach (ReportViewModel report in reports)
+            {
+                report.ReportingStatus = ReportStatus.Failed;
+                report.FileName = $"{report.FileName.Replace(".txt", "")}_failed.txt";
+
+                report.Update(reportRepo);
+            }
+        }
+
+
 
     }
 }

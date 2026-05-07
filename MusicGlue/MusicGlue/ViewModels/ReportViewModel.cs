@@ -17,6 +17,7 @@ namespace MusicGlue.ViewModels
         public string FileName
         {
             get { return report.FileName; } 
+            set { report.FileName = value; }
         }
 
         public int SalesCount
@@ -27,6 +28,7 @@ namespace MusicGlue.ViewModels
         public ReportStatus ReportingStatus
         {
             get { return report.ReportStatus; }
+            set { report.ReportStatus = value; }
         }
 
         public bool Selected { get; set; }
@@ -35,6 +37,11 @@ namespace MusicGlue.ViewModels
         {
             this.report = report;
 
+        }
+
+        public void Update(ReportRepository reportRepository)
+        {
+            reportRepository.Update(report);
         }
 
     }
