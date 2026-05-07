@@ -1,6 +1,7 @@
 ﻿using MusicGlue;
 using MusicGlue.Models;
 using MusicGlue.Models.Formatters;
+using MusicGlue.ViewModels;
 
 namespace MusicGlueTest
 {
@@ -11,11 +12,11 @@ namespace MusicGlueTest
         string date = DateTime.Now.ToString("yyMMdd"); 
         List<Consignment> consignments = new List<Consignment>();
         IFormatter formatter;
+        ReportRepository reportRepository;
 
         [TestInitialize]
         public void init()
         {
-            // Act
             ProductDescription d1 = new ProductDescription()
             {
                 Id = 1,
@@ -56,7 +57,7 @@ namespace MusicGlueTest
                 ZipCode = "WC",
                 CustomerCountry = "England",
                 ConsignmentStatus = ConsignmentStatus.Dispatched,
-                ReportingStatus = false,
+                ReportingStatus = ConsignmentReportingStatus.NotReported,
                 MusicProducts = new List<MusicProduct>() { m1, m1, m1, m2, m2, m3, m3 }
             };
 
@@ -66,7 +67,7 @@ namespace MusicGlueTest
                 ZipCode = "WC",
                 CustomerCountry = "England",
                 ConsignmentStatus = ConsignmentStatus.Dispatched,
-                ReportingStatus = false,
+                ReportingStatus = ConsignmentReportingStatus.NotReported,
                 MusicProducts = new List<MusicProduct>() { m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m3, m2, m1, m1, m1 }
             };
 
@@ -76,7 +77,7 @@ namespace MusicGlueTest
                 ZipCode = "L",
                 CustomerCountry = "England",
                 ConsignmentStatus = ConsignmentStatus.Dispatched,
-                ReportingStatus = false,
+                ReportingStatus = ConsignmentReportingStatus.NotReported,
                 MusicProducts = new List<MusicProduct>() { m1, m1, m3 }
             };
 
@@ -86,7 +87,7 @@ namespace MusicGlueTest
                 ZipCode = "WC",
                 CustomerCountry = "England",
                 ConsignmentStatus = ConsignmentStatus.Dispatched,
-                ReportingStatus = false,
+                ReportingStatus = ConsignmentReportingStatus.NotReported,
                 MusicProducts = new List<MusicProduct>() { m3 }
             };
 
@@ -95,11 +96,13 @@ namespace MusicGlueTest
             consignments.Add(c3);
             consignments.Add(c4);
             formatter = new OCCFormatter();
+
         }
 
         [TestMethod]
         public void OCCFormatterTest()
         {
+            //Act
             string actual = formatter.Format(consignments);
             string expected = "0WC   " + date + Environment.NewLine +
                 "15321900114742000006 00599" + Environment.NewLine +
@@ -143,6 +146,17 @@ namespace MusicGlueTest
 
             //Assert
             Assert.IsTrue(ReportHandler.CheckReportHasBeenSent(fileName));
+        }
+
+        [TestMethod]
+        public void ReportRepositoryTest()
+        {
+            //Act
+            reportRepository = new ReportRepository();
+            List<Report> reports = reportRepository.GetAll();
+
+            //Assert
+            Assert.AreEqual("MusicGlue_new_platform260414.txt", reports[0].FileName);
         }
     }
 }
