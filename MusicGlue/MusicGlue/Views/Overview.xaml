@@ -33,7 +33,7 @@
         <Image Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Source="/Images/google_icon_2.png"/>
         <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Background="#251b40" Content="HOMEPAGE" Foreground="White" FontSize="72" Command="{Binding NavigateToHomeViewCommand}"/>
         <Button Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="2" Background="White" Content="OVERVIEW" Foreground="#251b40" FontSize="72"/>
-        <Button Grid.Row="7" Grid.Column="6" Grid.ColumnSpan="2" Background="#fac955" Content="RESEND REPORT" Foreground="#251b40" FontSize="48" Margin="25,25,25,25"/>
+        <Button Grid.Row="7" Grid.Column="6" Grid.ColumnSpan="2" Background="#fac955" Content="RESEND REPORT" Foreground="#251b40" FontSize="48" Margin="25,25,25,25" Command="{Binding ResendCommand}" CommandParameter="{Binding}"/>
         <DataGrid  RowHeight="70" AutoGenerateColumns="False" ColumnWidth="*"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="8" Grid.RowSpan="5" Margin="25,50,25,0" ItemsSource="{Binding Reports}" BorderBrush="Black" BorderThickness="4" FontSize="28"> 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Organisation" Binding="{Binding Organisation}" >
@@ -72,7 +72,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridCheckBoxColumn Header="Select" Binding="{Binding Selected}" >
+                <DataGridCheckBoxColumn Header="Select" Binding="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                     <DataGridCheckBoxColumn.ElementStyle>
                         <Style TargetType="CheckBox">
                             <Setter Property="VerticalAlignment" Value="Center"/>

@@ -56,7 +56,7 @@ namespace MusicGlue.ViewModels
 
             CheckScriptRunStatus();
 
-            NavigateToOverviewCommand = new NavigateCommand(new NavigationService(navigationStore, () => new OverviewViewModel(navigationStore, dispatcher)));
+            NavigateToOverviewCommand = new NavigateCommand(new NavigationService(navigationStore, () => new OverviewViewModel(navigationStore, dispatcher, consignmentRepo, repOrganisationRepo)));
 
         }
 

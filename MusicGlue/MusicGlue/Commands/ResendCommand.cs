@@ -20,7 +20,7 @@ namespace MusicGlue.Commands
         {
             if (parameter is OverviewViewModel ovm)
             {
-                resendThread = new Thread(ovm.ResetReportingStatusAndDeleteFile);
+                resendThread = new Thread(ovm.Resend);
                 resendThread.Start();
             }
         }

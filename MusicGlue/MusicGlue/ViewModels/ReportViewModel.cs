@@ -43,6 +43,10 @@ namespace MusicGlue.ViewModels
         {
             reportRepository.Update(report);
         }
+        public Report GetReport()
+        {
+            return report;
+        }
 
     }
 }

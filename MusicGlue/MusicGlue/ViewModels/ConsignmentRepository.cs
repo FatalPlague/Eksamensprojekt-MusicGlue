@@ -116,5 +116,9 @@ namespace MusicGlue.ViewModels
                 }
             }
         }
+        public Consignment GetConsignmentById(int id)
+        {
+            return consignments.Find(x => x.Id == id) ?? null;
+        }
     }
 }
