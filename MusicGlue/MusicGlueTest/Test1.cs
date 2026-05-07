@@ -100,7 +100,7 @@ namespace MusicGlueTest
         }
 
         [TestMethod]
-        public void OCCFormatterTest()
+        public void IsOCCFormatCorrect()
         {
             //Act
             string actual = formatter.Format(consignments);
@@ -132,13 +132,12 @@ namespace MusicGlueTest
         }
 
         [TestMethod]
-        public void ReportHandlerTest()
+        public void CheckForPreexistingFile()
         {
             //Act
             string consignmentToReport = formatter.Format(consignments);
             string fileName = "MusicGlue_new_platform" + DateTime.Now.ToString("yyMMdd") + ".txt";
             
-            //check if file already exists
             if(ReportHandler.CheckReportHasBeenSent(fileName))
                 File.Delete(fileName);
 
@@ -149,7 +148,7 @@ namespace MusicGlueTest
         }
 
         [TestMethod]
-        public void ReportRepositoryTest()
+        public void CheckingIfRepositoryWorks()
         {
             //Act
             reportRepository = new ReportRepository();
