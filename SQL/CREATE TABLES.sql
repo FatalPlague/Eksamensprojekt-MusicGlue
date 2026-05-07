@@ -1,7 +1,7 @@
 --drop database MusicGlue
 --go
---CREATE DATABASE MusicGlue
---go
+CREATE DATABASE MusicGlue
+go
 use MusicGlue
 
 CREATE TABLE REPORTINGORGANISATION (
