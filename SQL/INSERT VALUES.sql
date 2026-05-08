@@ -1,4 +1,5 @@
-use MusicGlue
+use MusicGlue 
+
 INSERT INTO REPORTINGORGANISATION (Name, Country)
 VALUES
 ('OCC', 'England'),
@@ -11,15 +12,18 @@ VALUES
 ('MusicGlue_new_platform260416.txt', CAST('2026-04-16' AS DATETIME2), 501, 0, 1),
 ('MusicGluePhysical_2026041401.txt', CAST('2026-04-14' AS DATETIME2), 937, 0, 2),
 ('MusicGluePhysical_2026041501.txt', CAST('2026-04-15' AS DATETIME2), 209, 0, 2),
-('MusicGluePhysical_2026041601.txt', CAST('2026-04-16' AS DATETIME2), 284, 0, 2);
+('MusicGluePhysical_2026041601.txt', CAST('2026-04-16' AS DATETIME2), 284, 0, 2),
+('MusicGlue_new_platform260413_failed.txt', CAST('2026-04-13' AS DATETIME2), 420, 1, 1);
 
 INSERT INTO CONSIGNMENT (CustomerCountry, ZipCode, ConsignmentStatus, ReportingStatus)
 VALUES
 ('England', 'WC', 1, 0),
 ('Australia', '11455', 2, 0),
-('England', 'N', 0, 0),
-('Australia', '33100', 0, 0),
-('England', 'YO', 2, 0);
+('England', 'N', 2, 0),
+('Australia', '33100', 1, 0),
+('England', 'YO', 2, 0),
+('England', 'AL', 0, 1),
+('Australia', '93600', 0, 0);
 
 INSERT INTO REPORT_CONSIGNMENT (ReportId, ConsignmentId)
 VALUES
@@ -32,7 +36,10 @@ VALUES
 (2,3),
 (2,5),
 (5,2),
-(5,4);
+(5,4),
+(7,1),
+(7,3),
+(7,5);
 
 INSERT INTO PRODUCTDESCRIPTION (APN, CatalogNumber, SKU, Barcode)
 VALUES
@@ -59,14 +66,3 @@ VALUES
 (4, 4),
 (1, 5),
 (3, 5);
-
-INSERT INTO REPORT (FileName, ReportingDate, TotalSales, ReportStatus, ReportingOrganisationId) VALUES
-('report_jan_2026.csv', '2026-01-31', 15000, 1, 1),
-('report_feb_2026.csv', '2026-02-28', 22000, 0, 1),
-('report_mar_2026.csv', '2026-03-31', 18000, 0, 1);
-
-INSERT INTO REPORT_CONSIGNMENT (ReportId, ConsignmentId) VALUES
-(1,1),
-(1,2),
-(2,3),
-(3,4);

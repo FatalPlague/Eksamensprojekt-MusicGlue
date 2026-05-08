@@ -17,6 +17,7 @@ namespace MusicGlue.ViewModels
         private ReportRepository reportRepo;
         private ConsignmentRepository consignmentRepo;
         private ReportingOrganisationRepository repOrganisationRepo;
+        private Dispatcher dispatcher;
         public ObservableCollection<ReportViewModel> Reports { get; set; }
         public ICommand NavigateToHomeViewCommand { get; }
         public OverviewViewModel(NavigationStore navigationStore, Dispatcher dispatcher, ConsignmentRepository consignmentRepo, ReportingOrganisationRepository repOrganisationRepo)
@@ -34,6 +35,7 @@ namespace MusicGlue.ViewModels
             this.repOrganisationRepo = repOrganisationRepo;
 
             NavigateToHomeViewCommand = new NavigateCommand(new NavigationService(navigationStore, () => new HomeViewModel(navigationStore, dispatcher)));
+            this.dispatcher = dispatcher;
 
         }
 
@@ -53,7 +55,14 @@ namespace MusicGlue.ViewModels
                 reportvm.ReportingStatus = ReportStatus.Failed;
                 reportvm.FileName = reportvm.FileName.Replace(".txt", "_failed.txt");
 
+                report.ReportStatus = ReportStatus.Resent;
                 reportvm.Update(reportRepo);
+
+                dispatcher.Invoke(new Action(() =>
+                {
+                    Reports.Add(new ReportViewModel(report));
+                }));
+                //Reports.Add(new ReportViewModel(report));
 
 
             }
@@ -72,6 +81,8 @@ namespace MusicGlue.ViewModels
             string formatedConsignments = reportOrganisation.Formatter.Format(consignments);
 
             ReportHandler.SaveSendReport(formatedConsignments, report.FileName);
+
+            reportRepo.Create(report);
 
         }
 
