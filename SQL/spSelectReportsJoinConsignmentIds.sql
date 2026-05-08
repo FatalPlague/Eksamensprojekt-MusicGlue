@@ -1,0 +1,18 @@
+use MusicGlue
+go
+CREATE PROCEDURE spSelectReportsJoinConsignmentIds AS 
+BEGIN
+	SELECT 
+		REPORT.Id AS ReportId, 
+		REPORT.FileName, 
+		REPORT.ReportingDate, 
+		REPORT.TotalSales, 
+		REPORT.ReportStatus, 
+		REPORT.ReportingOrganisationId, 
+		REPORT_CONSIGNMENT.ConsignmentId AS ConsignmentId
+	FROM 
+		REPORT, 
+		REPORT_CONSIGNMENT
+	WHERE 
+		REPORT.Id = REPORT_CONSIGNMENT.ReportId
+END;

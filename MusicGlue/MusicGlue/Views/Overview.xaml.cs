@@ -1,6 +1,4 @@
-﻿using MusicGlue.Stores;
-using MusicGlue.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -16,18 +14,13 @@ using System.Windows.Shapes;
 namespace MusicGlue.Views
 {
     /// <summary>
-    /// Interaction logic for HomeView.xaml
+    /// Interaction logic for Overview.xaml
     /// </summary>
-    public partial class HomeView : UserControl
+    public partial class Overview : UserControl
     {
-        public HomeView()
+        public Overview()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

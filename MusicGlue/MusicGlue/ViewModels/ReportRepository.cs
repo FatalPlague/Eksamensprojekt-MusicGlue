@@ -25,15 +25,15 @@ namespace MusicGlue.ViewModels
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO Report (Id, FileName, ReportingDate, TotalSales, Reportstatus, ReportingOrganisationId) " +
-                     "VALUES(@Id, @FileName, @ReportingDate, @TotalSales, @ReportStatus, @ReportingOrganisationId)" + "SELECT @@IDENTITY", con))
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO Report (FileName, ReportingDate, TotalSales, Reportstatus, ReportingOrganisationId) " +
+                     "VALUES(@FileName, @ReportingDate, @TotalSales, @ReportStatus, @ReportingOrganisationId)" + "SELECT @@IDENTITY", con))
                 {
-                    cmd.Parameters.Add("@Id", SqlDbType.Int).Value = reportToBeCreated.Id;
                     cmd.Parameters.Add("@FileName", SqlDbType.NVarChar).Value = reportToBeCreated.FileName;
                     cmd.Parameters.Add("@ReportingDate", SqlDbType.DateTime).Value = reportToBeCreated.ReportingDate;
                     cmd.Parameters.Add("@TotalSales", SqlDbType.Int).Value = reportToBeCreated.TotalSales;
                     cmd.Parameters.Add("@ReportStatus", SqlDbType.Int).Value = reportToBeCreated.ReportStatus;
                     cmd.Parameters.Add("@ReportingOrganisationId", SqlDbType.Int).Value = reportToBeCreated.ReportingOrganisationId;
+                    reportToBeCreated.Id = Convert.ToInt32(cmd.ExecuteScalar());
 
                     reports.Add(reportToBeCreated);
                 }
@@ -45,23 +45,47 @@ namespace MusicGlue.ViewModels
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
-                SqlCommand cmd = new SqlCommand("SELECT Id, FileName, ReportingDate, TotalSales, ReportStatus, ReportingOrganisationId FROM REPORT", con);
+                SqlCommand cmd = new SqlCommand("exec spSelectReportsJoinConsignmentIds", con);
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
+                    Dictionary<int, Report> reportDictionary = new Dictionary<int, Report>();
+
                     while (dr.Read())
                     {
-                        string fileName = (string)dr["FileName"];
-                        Report report = new Report
+                        int reportId = (int)dr["ReportId"];
+                        if (!reportDictionary.TryGetValue(reportId, out Report? report))
                         {
-                            Id = dr.GetInt32(0),
-                            FileName = fileName,
-                            ReportingDate = (DateTime)dr["ReportingDate"],
-                            TotalSales = (int)dr["TotalSales"],
-                            ReportStatus = (ReportStatus)dr["ReportStatus"],
-                            ReportingOrganisationId = (int)dr["ReportingOrganisationId"]
-                        };
-                        reports.Add(report);
+                            report = new Report
+                            {
+                                Id = reportId,
+                                FileName = (string)dr["FileName"],
+                                ReportingDate = (DateTime)dr["ReportingDate"],
+                                TotalSales = (int)dr["TotalSales"],
+                                ReportStatus = (ReportStatus)dr["ReportStatus"],
+                                ReportingOrganisationId = (int)dr["ReportingOrganisationId"],
+                                ConsignmentIds = new List<int>()
+                            };
+
+                            reportDictionary.Add(reportId, report);
+                        }
+
+                        report.ConsignmentIds.Add((int)dr["ConsignmentId"]);
+
+
+
+                        //string fileName = (string)dr["FileName"];
+                        //Report report = new Report
+                        //{
+                        //    Id = dr.GetInt32(0),
+                        //    FileName = fileName,
+                        //    ReportingDate = (DateTime)dr["ReportingDate"],
+                        //    TotalSales = (int)dr["TotalSales"],
+                        //    ReportStatus = (ReportStatus)dr["ReportStatus"],
+                        //    ReportingOrganisationId = (int)dr["ReportingOrganisationId"]
+                        //};
+                        //reports.Add(report);
                     }
+                    reports = reportDictionary.Values.ToList();
                 }
             }
 

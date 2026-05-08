@@ -17,6 +17,11 @@
                 <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
                     <views:HomeView/>
                 </DataTemplate>
+
+                <DataTemplate DataType="{x:Type viewmodels:OverviewViewModel}">
+                    <views:Overview/>
+                </DataTemplate>
+                
             </ContentControl.Resources>
         </ContentControl>
     </Grid>
