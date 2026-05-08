@@ -1,3 +1,5 @@
+use MusicGlue
+go
 CREATE PROCEDURE spSelectConsignmentsJoinMusicProductsAndProductDescription AS
 BEGIN
 	SELECT
