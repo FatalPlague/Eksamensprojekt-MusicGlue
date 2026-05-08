@@ -18,15 +18,15 @@ namespace MusicGlue.ViewModels
         private ConsignmentRepository consignmentRepo;
         private ReportingOrganisationRepository repOrganisationRepo;
         private Dispatcher dispatcher;
-        public ObservableCollection<ReportViewModel> Reports { get; set; }
+        public ObservableCollection<ReportViewModel> ReportsVM { get; set; }
         public ICommand NavigateToHomeViewCommand { get; }
         public OverviewViewModel(NavigationStore navigationStore, Dispatcher dispatcher, ConsignmentRepository consignmentRepo, ReportingOrganisationRepository repOrganisationRepo)
         {
             reportRepo = new ReportRepository();
-            Reports = new ObservableCollection<ReportViewModel>();
+            ReportsVM = new ObservableCollection<ReportViewModel>();
             foreach (Report report in reportRepo.GetAll())
             {
-                Reports.Add(new ReportViewModel(report));
+                ReportsVM.Add(new ReportViewModel(report));
             }
             consignmentRepo = new ConsignmentRepository();
             repOrganisationRepo = new ReportingOrganisationRepository();
@@ -41,8 +41,8 @@ namespace MusicGlue.ViewModels
 
         public void Resend()
         {
-            List<ReportViewModel> reports = Reports.Where(report => report.Selected).ToList();
-            foreach (ReportViewModel reportvm in reports)
+            List<ReportViewModel> reportsVM = ReportsVM.Where(reportVM => reportVM.Selected).ToList();
+            foreach (ReportViewModel reportvm in reportsVM)
             {
                 Report oldReport = reportvm.GetReport();
                 Report newReport = new Report
@@ -65,8 +65,8 @@ namespace MusicGlue.ViewModels
 
                 dispatcher.Invoke(new Action(() =>
                 {
-                    int index = Reports.IndexOf(reportvm);
-                    Reports[index] = new ReportViewModel(oldReport);
+                    int index = ReportsVM.IndexOf(reportvm);
+                    ReportsVM[index] = new ReportViewModel(oldReport);
                 }));
 
                 reportRepo.Update(oldReport);
@@ -74,7 +74,7 @@ namespace MusicGlue.ViewModels
             }
         }
 
-        public void RemakeReport(Report report)
+        private void RemakeReport(Report report)
         {
             ReportingOrganisation reportOrganisation = repOrganisationRepo.Get(report.ReportingOrganisationId);
             List<Consignment> consignments = new List<Consignment>();
@@ -91,7 +91,7 @@ namespace MusicGlue.ViewModels
                 reportRepo.Create(report);
                 dispatcher.Invoke(new Action(() =>
                 {
-                    Reports.Add(new ReportViewModel(report));
+                    ReportsVM.Add(new ReportViewModel(report));
                 }));
             }
         }

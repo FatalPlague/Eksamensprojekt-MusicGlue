@@ -20,26 +20,6 @@ namespace MusicGlue.ViewModels
             InitializeRepository();
         }
 
-        public void Create(Report reportToBeCreated)
-        {
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO Report (FileName, ReportingDate, TotalSales, Reportstatus, ReportingOrganisationId) " +
-                     "VALUES(@FileName, @ReportingDate, @TotalSales, @ReportStatus, @ReportingOrganisationId)" + "SELECT @@IDENTITY", con))
-                {
-                    cmd.Parameters.Add("@FileName", SqlDbType.NVarChar).Value = reportToBeCreated.FileName;
-                    cmd.Parameters.Add("@ReportingDate", SqlDbType.DateTime).Value = reportToBeCreated.ReportingDate;
-                    cmd.Parameters.Add("@TotalSales", SqlDbType.Int).Value = reportToBeCreated.TotalSales;
-                    cmd.Parameters.Add("@ReportStatus", SqlDbType.Int).Value = reportToBeCreated.ReportStatus;
-                    cmd.Parameters.Add("@ReportingOrganisationId", SqlDbType.Int).Value = reportToBeCreated.ReportingOrganisationId;
-                    reportToBeCreated.Id = Convert.ToInt32(cmd.ExecuteScalar());
-
-                    reports.Add(reportToBeCreated);
-                }
-            }
-        }
-
         private void InitializeRepository()
         {
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -90,6 +70,27 @@ namespace MusicGlue.ViewModels
             }
 
         }
+
+        public void Create(Report reportToBeCreated)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO Report (FileName, ReportingDate, TotalSales, Reportstatus, ReportingOrganisationId) " +
+                     "VALUES(@FileName, @ReportingDate, @TotalSales, @ReportStatus, @ReportingOrganisationId)" + "SELECT @@IDENTITY", con))
+                {
+                    cmd.Parameters.Add("@FileName", SqlDbType.NVarChar).Value = reportToBeCreated.FileName;
+                    cmd.Parameters.Add("@ReportingDate", SqlDbType.DateTime).Value = reportToBeCreated.ReportingDate;
+                    cmd.Parameters.Add("@TotalSales", SqlDbType.Int).Value = reportToBeCreated.TotalSales;
+                    cmd.Parameters.Add("@ReportStatus", SqlDbType.Int).Value = reportToBeCreated.ReportStatus;
+                    cmd.Parameters.Add("@ReportingOrganisationId", SqlDbType.Int).Value = reportToBeCreated.ReportingOrganisationId;
+                    reportToBeCreated.Id = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    reports.Add(reportToBeCreated);
+                }
+            }
+        }
+        
         public void Update(Report reportToBeUpdated)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
