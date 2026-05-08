@@ -44,46 +44,56 @@ namespace MusicGlue.ViewModels
             List<ReportViewModel> reports = Reports.Where(report => report.Selected).ToList();
             foreach (ReportViewModel reportvm in reports)
             {
-                if (File.Exists(reportvm.FileName))
+                Report oldReport = reportvm.GetReport();
+                Report newReport = new Report
                 {
-                    File.Move(reportvm.FileName, reportvm.FileName.Replace(".txt", "_failed.txt"));
+                    FileName = oldReport.FileName,
+                    ReportingDate = DateTime.Now,
+                    ReportStatus = ReportStatus.Resent,
+                    TotalSales = oldReport.TotalSales,
+                    ConsignmentIds = oldReport.ConsignmentIds,
+                    ReportingOrganisationId = oldReport.ReportingOrganisationId
+                };
+
+                if (File.Exists(oldReport.FileName))
+                {
+                    File.Move(oldReport.FileName, oldReport.FileName.Replace(".txt", "_failed.txt"));
                 }
 
-                Report report = reportvm.GetReport();
-                RemakeReport(report);
-
-                reportvm.ReportingStatus = ReportStatus.Failed;
-                reportvm.FileName = reportvm.FileName.Replace(".txt", "_failed.txt");
-
-                report.ReportStatus = ReportStatus.Resent;
-                reportvm.Update(reportRepo);
+                oldReport.ReportStatus = ReportStatus.Failed;
+                oldReport.FileName = oldReport.FileName.Replace(".txt", "_failed.txt");
 
                 dispatcher.Invoke(new Action(() =>
                 {
-                    Reports.Add(new ReportViewModel(report));
+                    int index = Reports.IndexOf(reportvm);
+                    Reports[index] = new ReportViewModel(oldReport);
                 }));
-                //Reports.Add(new ReportViewModel(report));
 
-
+                reportRepo.Update(oldReport);
+                RemakeReport(newReport);
             }
         }
 
         public void RemakeReport(Report report)
         {
             ReportingOrganisation reportOrganisation = repOrganisationRepo.Get(report.ReportingOrganisationId);
-
             List<Consignment> consignments = new List<Consignment>();
             report.ConsignmentIds.ForEach(consignmentId =>
             {
                 consignments.Add(consignmentRepo.GetConsignmentById(consignmentId));
             });
 
-            string formatedConsignments = reportOrganisation.Formatter.Format(consignments);
+            if (reportOrganisation.Formatter != null)
+            {
+                string formatedConsignments = reportOrganisation.Formatter.Format(consignments);
+                ReportHandler.SaveSendReport(formatedConsignments, report.FileName);
 
-            ReportHandler.SaveSendReport(formatedConsignments, report.FileName);
-
-            reportRepo.Create(report);
-
+                reportRepo.Create(report);
+                dispatcher.Invoke(new Action(() =>
+                {
+                    Reports.Add(new ReportViewModel(report));
+                }));
+            }
         }
 
         public ICommand ResendCommand { get; } = new ResendCommand();
