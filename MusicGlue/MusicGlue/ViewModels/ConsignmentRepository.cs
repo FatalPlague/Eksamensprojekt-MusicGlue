@@ -72,7 +72,7 @@ namespace MusicGlue.ViewModels
             }
         }
 
-        public void Update (Consignment consignmentToBeUpdated)
+        public void Update(Consignment consignmentToBeUpdated)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
