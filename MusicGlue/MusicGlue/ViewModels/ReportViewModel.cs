@@ -9,10 +9,7 @@ namespace MusicGlue.ViewModels
     {
         private Report report;
 
-        public int Organisation
-        {
-            get { return report.ReportingOrganisationId; }
-        }
+        public string Organisation { get; }
 
         public string FileName
         {
@@ -33,10 +30,10 @@ namespace MusicGlue.ViewModels
 
         public bool Selected { get; set; }
 
-        public ReportViewModel(Report report)
+        public ReportViewModel(Report report, ReportingOrganisationRepository reportingOrganisationRepo)
         {
             this.report = report;
-
+            Organisation = reportingOrganisationRepo.Get(report.ReportingOrganisationId).Name;
         }
 
         public void Update(ReportRepository reportRepository)
