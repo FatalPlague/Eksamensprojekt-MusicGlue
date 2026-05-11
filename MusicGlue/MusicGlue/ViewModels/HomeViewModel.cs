@@ -63,36 +63,47 @@ namespace MusicGlue.ViewModels
 
         public void StartScript()
         {
-            if (!ReportHandler.CheckReportHasBeenSent(fileName))
+            try
             {
-                List<ReportingOrganisation> repOrgs = repOrganisationRepo.GetAll();
-                List<Consignment> allFormattedConsignments = new List<Consignment>();
-
-                string formattedConsignments = "";
-                repOrgs.ForEach(repOrg =>
+                scriptFailed = false;
+                if (!ReportHandler.CheckReportHasBeenSent(fileName))
                 {
-                    List<Consignment> consignments = consignmentRepo.GetByCustomerCountry(repOrg.Country);
+                    List<ReportingOrganisation> repOrgs = repOrganisationRepo.GetAll();
+                    List<Consignment> allFormattedConsignments = new List<Consignment>();
 
-                    if (repOrg.Formatter != null)
+                    string formattedConsignments = "";
+                    repOrgs.ForEach(repOrg =>
                     {
-                        formattedConsignments = repOrg.Formatter.Format(consignments);
-                        allFormattedConsignments.AddRange(consignments);
-                    }
-                });
+                        List<Consignment> consignments = consignmentRepo.GetByCustomerCountry(repOrg.Country);
 
-                ReportHandler.SaveSendReport(formattedConsignments, fileName);
+                        if (repOrg.Formatter != null)
+                        {
+                            formattedConsignments = repOrg.Formatter.Format(consignments);
+                            allFormattedConsignments.AddRange(consignments);
+                        }
+                    });
+
+                    ReportHandler.SaveSendReport(formattedConsignments, fileName);
+                    CheckScriptRunStatus();
+
+                    allFormattedConsignments.ForEach(consignment =>
+                    {
+                        consignment.ReportingStatus = ConsignmentReportingStatus.Reported;
+                        consignmentRepo.Update(consignment);
+                    });
+                }
+            } 
+            catch
+            {
+                scriptFailed = true;
                 CheckScriptRunStatus();
-
-                allFormattedConsignments.ForEach(consignment =>
-                {
-                    consignment.ReportingStatus = ConsignmentReportingStatus.Reported;
-                    consignmentRepo.Update(consignment);
-                });
             }
+            
         }
 
         public void ResetReportingStatusAndDeleteFile() // this method is for testing only
         {
+            scriptFailed = false;
             consignmentRepo.ResetReportingStatus();
             if (File.Exists(fileName))
             {
@@ -101,11 +112,25 @@ namespace MusicGlue.ViewModels
             CheckScriptRunStatus();
         }
 
-
+        private bool scriptFailed = false;
         public bool CheckScriptRunStatus()
         {
             string message = "";
             bool result = false;
+
+            if (scriptFailed)
+            {
+                message = "Today's report failed to send";
+                result = false;
+
+                dispatcher.Invoke(new Action(() =>
+                {
+                    ScriptRunStatus = message;
+                }));
+
+                return result;
+            }
+
             if (ReportHandler.CheckReportHasBeenSent(fileName))
             {
                 message = "Today's report has been sent";
