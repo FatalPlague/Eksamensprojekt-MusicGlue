@@ -1,9 +1,11 @@
+USE master;
+GO
 DROP DATABASE IF EXISTS MusicGlue;
-GO;
+GO
 CREATE DATABASE MusicGlue;
-GO;
+GO
 USE MusicGlue;
-GO;
+GO
 
 CREATE TABLE REPORTINGORGANISATION (
 	Id INT IDENTITY(1,1),  
@@ -74,5 +76,111 @@ CREATE TABLE MUSICPRODUCT_CONSIGNMENT (
 	CONSTRAINT FK_MUSICPRODUCTCONSIGNMENT_CONSIGNMENT FOREIGN KEY (ConsignmentId) REFERENCES CONSIGNMENT(Id)
 );
 
-GO;
+GO
+CREATE PROCEDURE spSelectConsignmentsJoinMusicProductsAndProductDescription AS
+BEGIN
+	SELECT
+		CONSIGNMENT.Id AS 'ConsignmentId', 
+		CONSIGNMENT.CustomerCountry, 
+		CONSIGNMENT.ZipCode, 
+		CONSIGNMENT.ConsignmentStatus, 
+		CONSIGNMENT.ReportingStatus,
+		MUSICPRODUCT.Id AS 'MusicProductId', 
+		MUSICPRODUCT.Price,
+		PRODUCTDESCRIPTION.Id AS 'ProductDescriptionId', 
+		PRODUCTDESCRIPTION.APN, 
+		PRODUCTDESCRIPTION.CatalogNumber, 
+		PRODUCTDESCRIPTION.SKU, 
+		PRODUCTDESCRIPTION.Barcode
+	FROM 
+		CONSIGNMENT,
+		MUSICPRODUCT,
+		MUSICPRODUCT_CONSIGNMENT,
+		PRODUCTDESCRIPTION
+	WHERE
+		CONSIGNMENT.Id = MUSICPRODUCT_CONSIGNMENT.ConsignmentId AND 
+		MUSICPRODUCT.Id = MUSICPRODUCT_CONSIGNMENT.ProductId AND 
+		PRODUCTDESCRIPTION.Id = MUSICPRODUCT.ProductDescriptionId AND
+		CONSIGNMENT.ConsignmentStatus <> 0 AND
+		CONSIGNMENT.ReportingStatus = 0
+END;
 
+GO
+CREATE PROCEDURE spSelectReportsJoinConsignmentIds AS 
+BEGIN
+	SELECT 
+		REPORT.Id AS ReportId, 
+		REPORT.FileName, 
+		REPORT.ReportingDate, 
+		REPORT.TotalSales, 
+		REPORT.ReportStatus, 
+		REPORT.ReportingOrganisationId, 
+		REPORT_CONSIGNMENT.ConsignmentId AS ConsignmentId
+	FROM 
+		REPORT, 
+		REPORT_CONSIGNMENT
+	WHERE 
+		REPORT.Id = REPORT_CONSIGNMENT.ReportId
+END;
+
+GO
+
+INSERT INTO REPORTINGORGANISATION (Name, Country) VALUES
+	('OCC', 'England'),
+	('ARIA', 'Australia');
+
+INSERT INTO REPORT (FileName, ReportingDate, TotalSales, ReportStatus, ReportingOrganisationId) VALUES  
+	('MusicGlue_new_platform260414.txt', CAST('2026-04-14' AS DATETIME2), 437, 0, 1),
+	('MusicGlue_new_platform260415.txt', CAST('2026-04-15' AS DATETIME2), 349, 0, 1),
+	('MusicGlue_new_platform260416.txt', CAST('2026-04-16' AS DATETIME2), 501, 0, 1),
+	('MusicGluePhysical_2026041401.txt', CAST('2026-04-14' AS DATETIME2), 937, 0, 2),
+	('MusicGluePhysical_2026041501.txt', CAST('2026-04-15' AS DATETIME2), 209, 0, 2),
+	('MusicGluePhysical_2026041601.txt', CAST('2026-04-16' AS DATETIME2), 284, 0, 2),
+	('MusicGlue_new_platform260413_failed.txt', CAST('2026-04-13' AS DATETIME2), 420, 1, 1);
+
+INSERT INTO CONSIGNMENT (CustomerCountry, ZipCode, ConsignmentStatus, ReportingStatus) VALUES
+	('England', 'WC', 1, 0),
+	('Australia', '11455', 2, 0),
+	('England', 'N', 2, 0),
+	('Australia', '33100', 1, 0),
+	('England', 'YO', 2, 0),
+	('England', 'AL', 0, 1),
+	('Australia', '93600', 0, 0);
+
+INSERT INTO REPORT_CONSIGNMENT (ReportId, ConsignmentId) VALUES
+	(1,1),
+	(1,3),
+	(1,5),
+	(4,2),
+	(4,4),
+	(2,1),
+	(2,3),
+	(2,5),
+	(5,2),
+	(5,4),
+	(7,1),
+	(7,3),
+	(7,5);
+
+INSERT INTO PRODUCTDESCRIPTION (APN, CatalogNumber, SKU, Barcode) VALUES
+	('APN-001', 'CAT-1001', 'SKU-5001', '1234567891'),
+	('APN-002', 'CAT-1002', 'SKU-5002', '1234567892'),
+	('APN-003', 'CAT-1003', 'SKU-5003', '1234567893'),
+	('APN-004', 'CAT-1004', 'SKU-5004', '1234567894'),
+	('APN-005', 'CAT-1005', 'SKU-5005', '1234567895');
+
+INSERT INTO MUSICPRODUCT (Price, ProductDescriptionId) VALUES
+	(111.95, 1),
+	(8.50, 2),
+	(2.75, 3),
+	(5.00, 4),
+	(17.00, 5);
+
+INSERT INTO MUSICPRODUCT_CONSIGNMENT (ProductId, ConsignmentId) VALUES
+	(1, 1),
+	(2, 1),
+	(3, 2),
+	(5, 3),
+	(4, 4),
+	(1, 5),
+	(3, 5);
